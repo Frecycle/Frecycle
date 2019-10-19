@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "815974244847",
+    "firebase_url": "https://frecycle-8f17f.firebaseio.com",
+    "project_id": "frecycle-8f17f",
+    "storage_bucket": "frecycle-8f17f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815974244847:android:849a400be7103a4d80161a",
+        "android_client_info": {
+          "package_name": "io.github.frecycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815974244847-1pef12hot64ibbu3ediput3hoseufmtc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIx9GQjhoVK986Npqn2uDhtc-r3Nty_gQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815974244847-1pef12hot64ibbu3ediput3hoseufmtc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
