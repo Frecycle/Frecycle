@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.fragment_account.*
 
 
 class StartActivity : AppCompatActivity() {
@@ -19,7 +19,6 @@ class StartActivity : AppCompatActivity() {
     private lateinit var myAccountFragment: AccountFragment
 
     private lateinit var auth : FirebaseAuth
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +102,7 @@ class StartActivity : AppCompatActivity() {
         if(!email.isBlank() && !pass.isEmpty()) {
             auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(applicationContext, "Welcome ${auth.currentUser?.email.toString()}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Welcome ${auth.currentUser?.displayName.toString()}", Toast.LENGTH_LONG).show()
                     val intent = Intent(applicationContext, FeedActivity::class.java)
                     startActivity(intent)
                     finish()
