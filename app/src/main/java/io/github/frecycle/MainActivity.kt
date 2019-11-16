@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         object : CountDownTimer(1500, 1000) {
             override fun onFinish() {
-                val intent = Intent(applicationContext,StartActivity::class.java)
+                val intent = Intent(applicationContext,HomeActivity::class.java)
                 startActivity(intent)
                 finish()
             }

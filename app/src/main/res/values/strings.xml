@@ -12,6 +12,7 @@
     <string name="home">Home</string>
     <string name="fav">Favorites</string>
     <string name="myAccount">My Account</string>
+    <string name="accountLoginText">To see your account, please login. You can view your orders in My Account section.</string>
     <string name="sign_up">Sign Up</string>
     <string name="reset_pwd">Reset Password</string>
     <string name="termsOfUse">I have accepted the terms of use Frecycle ®</string>
