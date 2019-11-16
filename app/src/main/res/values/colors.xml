@@ -7,4 +7,5 @@
     <color name="colorSplashText">#F0F0F0</color>
     <color name="colorProgressBar">#303F9F</color>
     <color name="colorTextView">#83898E</color>
+    <color name="rating">#FFEB3B</color>
 </resources>

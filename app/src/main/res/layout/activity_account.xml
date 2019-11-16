@@ -20,7 +20,7 @@ tools:context=".AccountActivity">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/relative_layout"
+    android:id="@+id/account_layout"
     android:layout_marginStart="20dp"
     android:layout_marginEnd="20dp"
     android:layout_above="@id/bottom_nav">

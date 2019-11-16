@@ -20,7 +20,6 @@ class AccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_account)
 
         bottomNavigation = findViewById(R.id.bottom_nav)
-
         checkMenuItem()
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
@@ -50,7 +49,6 @@ class AccountActivity : AppCompatActivity() {
 
             }
             true
-
         }
     }
 

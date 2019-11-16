@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -66,5 +67,10 @@ class HomeActivity : AppCompatActivity() {
         val menu : Menu =  bottomNavigation.menu
         val menuItem : MenuItem = menu.getItem(0)
         menuItem.isChecked = true
+    }
+
+    fun getProfileActivity(view: View) {
+        val intent = Intent(applicationContext, ProfileActivity::class.java)
+        startActivity(intent)
     }
 }

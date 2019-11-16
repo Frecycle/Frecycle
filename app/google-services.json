@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "815974244847-6bha6jlj6vtrpl10lspmn06ri509eedo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.frecycle",
+            "certificate_hash": "2e31dcad4191f6b1f526ddd39cbb8865c325943c"
+          }
+        },
+        {
           "client_id": "815974244847-1pef12hot64ibbu3ediput3hoseufmtc.apps.googleusercontent.com",
           "client_type": 3
         }

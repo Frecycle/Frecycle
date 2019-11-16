@@ -12,5 +12,9 @@
         <item name="colorAccent">@color/colorProgressBar</item>
     </style>
 
+    <style name="Theme.Rating" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/rating</item>
+    </style>
+
 
 </resources>
