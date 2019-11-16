@@ -1,14 +1,18 @@
 package io.github.frecycle
 
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_account.*
+import kotlinx.android.synthetic.main.fragment_account.userEmailText
+import kotlinx.android.synthetic.main.fragment_reset_pwd.*
 
 
 class StartActivity : AppCompatActivity() {
@@ -23,24 +27,25 @@ class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
+
         auth = FirebaseAuth.getInstance()
 
-        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_nav)
+        homeFragment = HomeFragment()
+        searchFragment = SearchFragment()
+        favoritesFragment = FavoritesFragment()
+        myAccountFragment = AccountFragment()
 
-            homeFragment = HomeFragment()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.relative_layout, homeFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit()
 
-
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_nav)
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
 
             when (item.itemId) {
-
                 R.id.navigation_home -> {
-                    homeFragment = HomeFragment()
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.relative_layout, homeFragment)
@@ -49,7 +54,7 @@ class StartActivity : AppCompatActivity() {
                 }
 
                 R.id.navigation_search -> {
-                    searchFragment = SearchFragment()
+
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.relative_layout, searchFragment)
@@ -58,7 +63,6 @@ class StartActivity : AppCompatActivity() {
                 }
 
                 R.id.navigation_favorites -> {
-                    favoritesFragment = FavoritesFragment()
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.relative_layout, favoritesFragment)
@@ -67,7 +71,6 @@ class StartActivity : AppCompatActivity() {
                 }
 
                 R.id.navigation_myAccount -> {
-                    myAccountFragment = AccountFragment()
                     supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.relative_layout, myAccountFragment)
@@ -100,6 +103,7 @@ class StartActivity : AppCompatActivity() {
         val email = userEmailText.text.toString()
         val pass = passwordText.text.toString()
         if(!email.isBlank() && !pass.isEmpty()) {
+            loginProgressBar.visibility = View.VISIBLE
             auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(applicationContext, "Welcome ${auth.currentUser?.displayName.toString()}", Toast.LENGTH_LONG).show()
@@ -108,14 +112,59 @@ class StartActivity : AppCompatActivity() {
                     finish()
                 }
             }.addOnFailureListener { exception ->
-                if (exception != null) {
-                    Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-                }
+                loginProgressBar.visibility = View.INVISIBLE
+                Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
             }
         }else{
             Toast.makeText(applicationContext,"Email and Password cannot be empty.",Toast.LENGTH_LONG).show()
         }
     }
 
+    fun resetPwdTextClicked(view: View){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.relative_layout, ResetPwdFragment())
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .commit()
+    }
 
+    fun resetPassword(view : View){
+        val resetMail = resetPwdMail.text.toString()
+
+        if(resetMailValidate()){
+            auth.sendPasswordResetEmail(resetMail).addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Toast.makeText(applicationContext, "Email sent!", Toast.LENGTH_LONG).show()
+
+                    supportFragmentManager.beginTransaction()
+                        .remove(supportFragmentManager.findFragmentById(R.id.relative_layout)!!)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .commit()
+
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.relative_layout, myAccountFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit()
+                }
+            }.addOnFailureListener { exception ->
+                Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun resetMailValidate():Boolean{
+        if (resetPwdMail.text.toString().isEmpty()){
+            resetPwdMail.error = (getString(R.string.input_error_email))
+            resetPwdMail.requestFocus()
+            return false
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(resetPwdMail.text.toString()).matches()){
+            resetPwdMail.error = (getString(R.string.input_error_email_invalid))
+            resetPwdMail.requestFocus()
+            return false
+        }
+        return true
+    }
 }
+
+//TODO onBackPressed action
