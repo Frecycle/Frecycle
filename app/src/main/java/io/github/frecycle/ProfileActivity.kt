@@ -1,10 +1,14 @@
 package io.github.frecycle
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.RatingBar
+import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import io.github.frecycle.util.SelectionsPagerAdapter
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -16,7 +20,8 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        selectionsPagerAdapter = SelectionsPagerAdapter(supportFragmentManager)
+        selectionsPagerAdapter =
+            SelectionsPagerAdapter(supportFragmentManager)
 
         viewPager = findViewById(R.id.viewPager)
 
@@ -27,35 +32,28 @@ class ProfileActivity : AppCompatActivity() {
         viewPager.adapter = selectionsPagerAdapter
 
 
-
         tabLayout = findViewById(R.id.tabLayout)
         tabLayout.setupWithViewPager(viewPager)
 
 
         val ratingBar : RatingBar = findViewById(R.id.ratingBar)
         ratingBar.rating = 4.5F
+        setupTopToolBar()
+    }
 
+    private fun setupTopToolBar() {
+        val toolbar : Toolbar = findViewById(R.id.profileToolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+    
+    fun profilePhotoClicked(view: View) {
+        val intent = Intent(applicationContext,ShowProfilePhotoActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun profileMenuClicked(view: View) {
+        val intent = Intent(applicationContext,SettingsActivity::class.java)
+        startActivity(intent)
     }
 }
-
-/*
-                       <com.google.android.material.tabs.TabItem
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/onOfferTab"
-                            android:text="@string/onOffer">
-                        </com.google.android.material.tabs.TabItem>
-
-                        <com.google.android.material.tabs.TabItem
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/recycledTab"
-                            android:text="@string/recycled">
-                        </com.google.android.material.tabs.TabItem>
-
-                        <com.google.android.material.tabs.TabItem
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/comments">
-                        </com.google.android.material.tabs.TabItem>
- */

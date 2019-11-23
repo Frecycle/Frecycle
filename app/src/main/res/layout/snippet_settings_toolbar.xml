@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/settingsToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/backToProfileButton"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/ic_back_arrow"
+                    android:clickable="true"
+                    android:onClick="backToProfileClicked"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_toRightOf="@id/backToProfileButton"
+                    android:layout_centerVertical="true"
+                    android:text="@string/options"
+                    android:textSize="20sp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="?attr/colorBackgroundFloating">
+                </TextView>
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+</merge>

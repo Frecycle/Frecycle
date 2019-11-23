@@ -19,6 +19,31 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         auth = FirebaseAuth.getInstance()
 
+        setupBottomNavigationView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0,0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkMenuItem()
+    }
+
+    private fun checkMenuItem(){
+        val menu : Menu =  bottomNavigation.menu
+        val menuItem : MenuItem = menu.getItem(0)
+        menuItem.isChecked = true
+    }
+
+    fun getProfileActivity(view: View) {
+        val intent = Intent(applicationContext, ProfileActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun setupBottomNavigationView(){
         bottomNavigation = findViewById(R.id.bottom_nav)
 
         checkMenuItem()
@@ -47,30 +72,12 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(intent)
                     overridePendingTransition(0,0)
                 }
-
             }
             true
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        overridePendingTransition(0,0)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkMenuItem()
-    }
-
-    private fun checkMenuItem(){
-        val menu : Menu =  bottomNavigation.menu
-        val menuItem : MenuItem = menu.getItem(0)
-        menuItem.isChecked = true
-    }
-
-    fun getProfileActivity(view: View) {
-        val intent = Intent(applicationContext, ProfileActivity::class.java)
-        startActivity(intent)
+    private fun setupBottomNavView(){
+        var bottomNavigationViewEx : BottomNavigationView
     }
 }

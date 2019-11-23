@@ -14,14 +14,30 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        setupBottomNavigationView()
+    }
 
-        bottomNavigation = findViewById(R.id.bottom_nav)
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0,0)
+    }
 
+
+    override fun onResume() {
+        super.onResume()
         checkMenuItem()
+    }
 
+    private fun checkMenuItem(){
         val menu : Menu =  bottomNavigation.menu
         val menuItem : MenuItem = menu.getItem(1)
         menuItem.isChecked = true
+    }
+
+    private fun setupBottomNavigationView(){
+        bottomNavigation = findViewById(R.id.bottom_nav)
+
+        checkMenuItem()
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
 
@@ -47,27 +63,9 @@ class SearchActivity : AppCompatActivity() {
                     startActivity(intent)
                     overridePendingTransition(0,0)
                 }
-
             }
             true
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        overridePendingTransition(0,0)
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        checkMenuItem()
-    }
-
-    private fun checkMenuItem(){
-        val menu : Menu =  bottomNavigation.menu
-        val menuItem : MenuItem = menu.getItem(1)
-        menuItem.isChecked = true
     }
 
 }

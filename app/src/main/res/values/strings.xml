@@ -13,7 +13,11 @@
     <string name="fav">Favorites</string>
     <string name="myAccount">My Account</string>
     <string name="accountLoginText">To see your account, please login. You can view your orders in My Account section.</string>
+    <string name="settings">Account Settings</string>
+    <string name="options">Options</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
     <string name="reset_pwd">Reset Password</string>
     <string name="termsOfUse">I have accepted the terms of use Frecycle ®</string>
     <string name="input_error_name">name required</string>
@@ -28,24 +32,8 @@
     <string name="onOffer">ON OFFER</string>
     <string name="recycled">RECYCLED</string>
     <string name="comments">COMMENTS</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="change_photo">Change Photo</string>
 
 </resources>

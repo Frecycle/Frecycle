@@ -19,6 +19,32 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
+        setupBottomNavigationView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0,0)
+    }
+
+    fun accountLoginClicked(view: View) {
+        val intent = Intent(applicationContext, UserOperationsActivity::class.java)
+        startActivity(intent)
+        onResume()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkMenuItem()
+    }
+
+    private fun checkMenuItem(){
+        val menu : Menu =  bottomNavigation.menu
+        val menuItem : MenuItem = menu.getItem(3)
+        menuItem.isChecked = true
+    }
+
+    private fun setupBottomNavigationView() {
         bottomNavigation = findViewById(R.id.bottom_nav)
         checkMenuItem()
 
@@ -46,32 +72,9 @@ class AccountActivity : AppCompatActivity() {
                 R.id.navigation_myAccount -> {
 
                 }
-
             }
             true
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        overridePendingTransition(0,0)
-    }
-
-    fun accountLoginClicked(view: View) {
-        val intent = Intent(applicationContext, UserOperationsActivity::class.java)
-        startActivity(intent)
-        onResume()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkMenuItem()
-    }
-
-    private fun checkMenuItem(){
-        val menu : Menu =  bottomNavigation.menu
-        val menuItem : MenuItem = menu.getItem(3)
-        menuItem.isChecked = true
     }
 
 }

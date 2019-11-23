@@ -1,4 +1,4 @@
-package io.github.frecycle
+package io.github.frecycle.util
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

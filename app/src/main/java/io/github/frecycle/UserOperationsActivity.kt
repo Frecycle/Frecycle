@@ -195,6 +195,5 @@ class UserOperationsActivity : AppCompatActivity() {
         }else{
             super.onBackPressed()
         }
-
     }
 }
