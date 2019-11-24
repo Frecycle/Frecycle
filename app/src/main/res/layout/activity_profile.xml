@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical">
+    <include layout="@layout/snippet_bottom_nav_bar"/>
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/profileToolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:contentInsetStartWithNavigation="0dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="20dp"
-                android:layout_gravity="end"
-                android:id="@+id/profileMenu"
-                android:background="@color/colorPrimary"
-                android:src="@drawable/ic_ellipses"
-                android:clickable="true"
-                android:onClick="profileMenuClicked"
-                android:focusable="true">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/profileToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:contentInsetStartWithNavigation="0dp"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            </ImageButton>
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_gravity="end"
+                    android:id="@+id/profileMenu"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/ic_ellipses"
+                    android:clickable="true"
+                    android:onClick="profileMenuClicked"
+                    android:focusable="true">
 
-        </androidx.appcompat.widget.Toolbar>
+                </ImageButton>
+
+            </androidx.appcompat.widget.Toolbar>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +57,7 @@
                     android:padding="5dp">
 
                     <com.mikhaellopez.circularimageview.CircularImageView
-                        android:id="@+id/imageCircular"
+                        android:id="@+id/profilePhoto"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:src="@drawable/maggie"
@@ -70,7 +73,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="Lauren Cohan"
+                        android:id="@+id/profileNameText"
+                        android:text="@string/no_name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                         android:textColor="?attr/colorBackgroundFloating">
                     </TextView>
@@ -83,7 +87,8 @@
                         android:theme="@style/Theme.Rating"
                         android:layout_marginBottom="5dp"
                         android:numStars="5"
-                        android:clickable="true" />
+                        android:clickable="true"
+                        android:focusable="true" />
 
 
                 </LinearLayout>
@@ -106,17 +111,17 @@
 
             </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewPager"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
 
-        </RelativeLayout>
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
-    </LinearLayout>
+            </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+</RelativeLayout>

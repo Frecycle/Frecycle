@@ -1,11 +1,11 @@
 package io.github.frecycle
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_login.userEmailText
 import kotlinx.android.synthetic.main.fragment_reset_pwd.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
-class UserOperationsActivity : AppCompatActivity() {
+class SignInOutUpActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
     private lateinit var loginFragment: LoginFragment
     private lateinit var signUpFragment: SignUpFragment
@@ -23,7 +23,7 @@ class UserOperationsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_operations)
+        setContentView(R.layout.activity_sign_in_out_up)
 
         auth = FirebaseAuth.getInstance()
         loginFragment = LoginFragment()
@@ -63,7 +63,9 @@ class UserOperationsActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(applicationContext, "Welcome ${auth.currentUser?.displayName.toString()}", Toast.LENGTH_LONG).show()
-                    val intent = Intent(applicationContext, FeedActivity::class.java)
+                    val intent = Intent(applicationContext, ProfileActivity::class.java)
+                    // It will totally clears all previous activity(s) and start new activity.
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     finish()
                 }

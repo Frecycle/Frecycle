@@ -6,7 +6,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".SearchActivity">
 
-<include layout="@layout/snippet_bottom_nav_bar"></include>
+<include layout="@layout/snippet_bottom_nav_bar"/>
 
 <RelativeLayout
     android:layout_width="match_parent"

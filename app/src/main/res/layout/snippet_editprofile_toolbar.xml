@@ -29,7 +29,7 @@
                     android:src="@drawable/ic_back_arrow"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="backToProfileClicked"/>
+                    android:onClick="backToSettingsClicked"/>
 
                 <TextView
                     android:layout_width="wrap_content"

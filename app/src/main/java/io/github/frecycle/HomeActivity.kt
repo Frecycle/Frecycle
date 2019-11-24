@@ -1,25 +1,30 @@
 package io.github.frecycle
 
-import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+import com.nostra13.universalimageloader.core.ImageLoader
+import io.github.frecycle.util.BottomNavigationViewHelper
+import io.github.frecycle.util.UniversalImageLoader
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
-    private lateinit var bottomNavigation : BottomNavigationView
+    private lateinit var bottomNavigation : BottomNavigationViewEx
+    private val activityNum : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         auth = FirebaseAuth.getInstance()
+        bottomNavigation = findViewById(R.id.bottom_nav)
 
-        setupBottomNavigationView()
+        // BottomNavigationView activity changer
+        BottomNavigationViewHelper.setupBottomNavigationView(applicationContext,this, bottomNavigation)
+
+        initImageLoader()
     }
 
     override fun onPause() {
@@ -29,55 +34,12 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkMenuItem()
+        BottomNavigationViewHelper.Check.checkMenuItem(bottomNavigation,activityNum)
     }
 
-    private fun checkMenuItem(){
-        val menu : Menu =  bottomNavigation.menu
-        val menuItem : MenuItem = menu.getItem(0)
-        menuItem.isChecked = true
+    private fun initImageLoader(){
+        val universalImageLoader = UniversalImageLoader(applicationContext)
+        ImageLoader.getInstance().init(universalImageLoader.getConfig())
     }
 
-    fun getProfileActivity(view: View) {
-        val intent = Intent(applicationContext, ProfileActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun setupBottomNavigationView(){
-        bottomNavigation = findViewById(R.id.bottom_nav)
-
-        checkMenuItem()
-
-        bottomNavigation.setOnNavigationItemSelectedListener { item ->
-
-            when (item.itemId) {
-                R.id.navigation_home -> {
-
-                }
-
-                R.id.navigation_search -> {
-                    val intent = Intent(applicationContext, SearchActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0,0)
-                }
-
-                R.id.navigation_favorites -> {
-                    val intent = Intent(applicationContext, FavoritesActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0,0)
-                }
-
-                R.id.navigation_myAccount -> {
-                    val intent = Intent(applicationContext, AccountActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0,0)
-                }
-            }
-            true
-        }
-    }
-
-    private fun setupBottomNavView(){
-        var bottomNavigationViewEx : BottomNavigationView
-    }
 }

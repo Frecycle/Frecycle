@@ -1,21 +1,22 @@
 package io.github.frecycle
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+import io.github.frecycle.util.BottomNavigationViewHelper
 
 class FavoritesActivity : AppCompatActivity() {
-    private lateinit var bottomNavigation : BottomNavigationView
+    private lateinit var bottomNavigation : BottomNavigationViewEx
+    private val activityNum : Int = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorites)
 
-        setupBottomNavigationView()
+        bottomNavigation = findViewById(R.id.bottom_nav)
+
+        // BottomNavigationView activity changer
+        BottomNavigationViewHelper.setupBottomNavigationView(applicationContext,this, bottomNavigation)
     }
 
     override fun onPause() {
@@ -25,47 +26,7 @@ class FavoritesActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkMenuItem()
-    }
-
-    private fun checkMenuItem(){
-        val menu : Menu =  bottomNavigation.menu
-        val menuItem : MenuItem = menu.getItem(2)
-        menuItem.isChecked = true
-    }
-
-    private fun setupBottomNavigationView(){
-        bottomNavigation = findViewById(R.id.bottom_nav)
-
-        checkMenuItem()
-
-        bottomNavigation.setOnNavigationItemSelectedListener { item ->
-
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    val intent = Intent(applicationContext, HomeActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0,0)
-                }
-
-                R.id.navigation_search -> {
-                    val intent = Intent(applicationContext, SearchActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0,0)
-                }
-
-                R.id.navigation_favorites -> {
-
-                }
-
-                R.id.navigation_myAccount -> {
-                    val intent = Intent(applicationContext, AccountActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0,0)
-                }
-            }
-            true
-        }
+        BottomNavigationViewHelper.Check.checkMenuItem(bottomNavigation,activityNum)
     }
 
 }
