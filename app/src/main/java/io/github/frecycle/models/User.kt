@@ -5,7 +5,7 @@ class User {
     lateinit var name: String
     lateinit var email: String
     var phone: Long = 0
-    var rank : Double = 0.0
+    var rank : Float = 0.0f
     lateinit var profile_photo : String
     lateinit var city : String
 
@@ -15,7 +15,7 @@ class User {
         name: String,
         email: String,
         phone: Long,
-        rank: Double,
+        rank: Float,
         profile_photo: String,
         city: String
     ) {

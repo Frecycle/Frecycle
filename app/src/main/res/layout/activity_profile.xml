@@ -9,6 +9,16 @@
 
     <include layout="@layout/snippet_bottom_nav_bar"/>
 
+    <ProgressBar
+        android:id="@+id/profileProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible"
+        android:theme="@style/ProgressBarStyle" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,7 +70,6 @@
                         android:id="@+id/profilePhoto"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:src="@drawable/maggie"
                         android:clickable="true"
                         android:focusable="true"
                         android:onClick="profilePhotoClicked"

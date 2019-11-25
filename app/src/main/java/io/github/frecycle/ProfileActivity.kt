@@ -3,6 +3,7 @@ package io.github.frecycle
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,15 +12,24 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.database.*
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+import com.mikhaellopez.circularimageview.CircularImageView
+import io.github.frecycle.models.User
 import io.github.frecycle.util.BottomNavigationViewHelper
+import io.github.frecycle.util.FirebaseMethods
 import io.github.frecycle.util.SelectionsPagerAdapter
+import io.github.frecycle.util.UniversalImageLoader
 
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
-    private val activityNum: Int = 3
     private lateinit var authListener: AuthStateListener
+    private lateinit var database : FirebaseDatabase
+    private lateinit var reference: DatabaseReference
+    private lateinit var methods: FirebaseMethods
+
+    private val activityNum: Int = 3
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
@@ -47,14 +57,29 @@ class ProfileActivity : AppCompatActivity() {
 
 
         setupTopToolBar()
+        setupFirebaseAuth()
 
         bottomNavigation = findViewById(R.id.bottom_nav)
 
         // BottomNavigationView activity changer
         BottomNavigationViewHelper.setupBottomNavigationView(applicationContext,this, bottomNavigation)
+    }
 
+    private fun setupFirebaseAuth(){
         auth = FirebaseAuth.getInstance()
-        initializeUserProfile()
+        database = FirebaseDatabase.getInstance()
+        reference = database.reference
+        methods = FirebaseMethods(this)
+
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                initializeUserProfile(methods.getUserData(dataSnapshot))
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     private fun setupTopToolBar() {
@@ -73,12 +98,19 @@ class ProfileActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun initializeUserProfile(){
+    private fun initializeUserProfile(user : User){
+        val photoView : CircularImageView = findViewById(R.id.profilePhoto)
+        UniversalImageLoader.setImage(user.profile_photo,photoView,null,"")
+
         val username : TextView = findViewById(R.id.profileNameText)
-        username.text = auth.currentUser?.displayName
+        username.text = user.name
 
         val ratingBar : RatingBar = findViewById(R.id.ratingBar)
-        ratingBar.rating = 4.5F
+        ratingBar.rating = user.rank
+
+        val progressBar : ProgressBar = findViewById(R.id.profileProgressBar)
+        progressBar.visibility = View.GONE
+
     }
 
     override fun onPause() {

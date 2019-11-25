@@ -21,9 +21,6 @@ class FirebaseMethods {
     private lateinit var context: Context
     private lateinit var user_id : String
 
-/*
-    private lateinit var databaseRef : DatabaseReference
-    private lateinit var storageRef : StorageReference*/
 
     constructor(context: Context) {
         auth = FirebaseAuth.getInstance()
@@ -37,10 +34,7 @@ class FirebaseMethods {
         }
     }
 
-    fun itExists(result : Boolean):Boolean{
-        return result
-    }
-
+    //TODO result değişkeni pass-by-value olarak değiştiği için bir düzeltme şart
     fun checkIfPhoneExists(phone : Long):Boolean{
 
         val query: Query = databaseReference
@@ -62,7 +56,6 @@ class FirebaseMethods {
                 }
 
                 Log.d("ABUZERafterFor",result.toString())
-
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -107,12 +100,40 @@ class FirebaseMethods {
     }
 
     fun addNewUser(user_id : String, name : String, email : String, phone: Long){
-        val user : User = User(user_id,name,email,phone,0.0,"","")
+        val user : User = User(user_id,name,email,phone,0.0f,"","")
 
         databaseReference.child("users")
             .child(user_id)
             .setValue(user)
 
+    }
+
+    fun getUserData(dataSnapshot: DataSnapshot) : User {
+        val user = User()
+
+        for (ds : DataSnapshot in dataSnapshot.children){
+            if(ds.key.equals("users")){
+                try {
+                    user.name = ds.child(user_id).getValue(User::class.java)!!.name
+
+                    user.city = ds.child(user_id).getValue(User::class.java)!!.city
+
+                    user.email = ds.child(user_id).getValue(User::class.java)!!.email
+
+                    user.phone = ds.child(user_id).getValue(User::class.java)!!.phone
+
+                    user.profile_photo = ds.child(user_id).getValue(User::class.java)!!.profile_photo
+
+                    user.rank = ds.child(user_id).getValue(User::class.java)!!.rank
+
+                    user.user_id = ds.child(user_id).getValue(User::class.java)!!.user_id
+
+                }catch ( e: NullPointerException){
+                    Log.d("FirebaseMethods: ", e.message)
+                }
+            }
+        }
+        return user
     }
 
 
