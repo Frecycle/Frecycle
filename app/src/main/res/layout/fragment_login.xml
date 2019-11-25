@@ -94,11 +94,10 @@
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="75dp"
         android:background="@drawable/button_drawable"
-        android:onClick="loginButtonClicked"
         android:text="@string/login"
         android:textAllCaps="false"
         android:textColor="@color/colorAccent"

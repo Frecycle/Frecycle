@@ -55,7 +55,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun setupFragments(){
         pagerAdapter = SelectionsStatePagerAdapter(supportFragmentManager)
         pagerAdapter.addFragment(EditProfileFragment(),getString(R.string.edit_profile))
-        pagerAdapter.addFragment(EditProfileFragment(),getString(R.string.sign_out))
+        pagerAdapter.addFragment(SignOutFragment(),getString(R.string.sign_out))
     }
 
     fun backToProfileClicked(view : View) {

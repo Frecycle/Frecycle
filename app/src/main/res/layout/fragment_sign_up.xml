@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSplashText"
     tools:context=".SignUpFragment">
 
     <LinearLayout
@@ -58,7 +57,6 @@
             android:id="@+id/signUpButton"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:onClick="signUpButtonClicked"
             android:layout_marginTop="25dp"
             android:text="@string/sign_up"
             android:background="@drawable/button_drawable"

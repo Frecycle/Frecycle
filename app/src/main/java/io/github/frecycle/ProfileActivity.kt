@@ -1,15 +1,16 @@
 package io.github.frecycle
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import io.github.frecycle.util.BottomNavigationViewHelper
 import io.github.frecycle.util.SelectionsPagerAdapter
@@ -17,6 +18,9 @@ import io.github.frecycle.util.SelectionsPagerAdapter
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
+    private val activityNum: Int = 3
+    private lateinit var authListener: AuthStateListener
+
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     private lateinit var selectionsPagerAdapter: SelectionsPagerAdapter
@@ -42,8 +46,6 @@ class ProfileActivity : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
 
-        val ratingBar : RatingBar = findViewById(R.id.ratingBar)
-        ratingBar.rating = 4.5F
         setupTopToolBar()
 
         bottomNavigation = findViewById(R.id.bottom_nav)
@@ -74,5 +76,18 @@ class ProfileActivity : AppCompatActivity() {
     private fun initializeUserProfile(){
         val username : TextView = findViewById(R.id.profileNameText)
         username.text = auth.currentUser?.displayName
+
+        val ratingBar : RatingBar = findViewById(R.id.ratingBar)
+        ratingBar.rating = 4.5F
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0, 0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BottomNavigationViewHelper.Check.checkMenuItem(bottomNavigation, activityNum)
     }
 }

@@ -4,19 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.userEmailText
-import kotlinx.android.synthetic.main.fragment_reset_pwd.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+
+import io.github.frecycle.util.FirebaseMethods
 
 class SignInOutUpActivity : AppCompatActivity() {
-    private lateinit var auth : FirebaseAuth
+
+    private lateinit var firebaseMethods : FirebaseMethods
+
     private lateinit var loginFragment: LoginFragment
     private lateinit var signUpFragment: SignUpFragment
     private lateinit var resetPwdFragment: ResetPwdFragment
@@ -25,171 +26,44 @@ class SignInOutUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in_out_up)
 
-        auth = FirebaseAuth.getInstance()
+        firebaseMethods = FirebaseMethods(this)
+
+        initFragments()
+
+        changeFragment(loginFragment,null)
+    }
+
+    private fun initFragments(){
         loginFragment = LoginFragment()
         resetPwdFragment = ResetPwdFragment()
         signUpFragment = SignUpFragment()
-
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-            .replace(R.id.userOperationsLayout, loginFragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .commit()
     }
 
     fun signUpTextClicked(view : View){
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-            .replace(R.id.userOperationsLayout, signUpFragment)
-            .addToBackStack("login_fragment")
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .commit()
+        changeFragment(signUpFragment,"login_fragment")
     }
 
     fun resetPwdTextClicked(view: View){
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-            .replace(R.id.userOperationsLayout, resetPwdFragment)
-            .addToBackStack("login_fragment")
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .commit()
+        changeFragment(resetPwdFragment,"login_fragment")
     }
 
-    fun loginButtonClicked(view : View){
-        val email = userEmailText.text.toString()
-        val pass = passwordText.text.toString()
-        if(!email.isBlank() && !pass.isEmpty()) {
-            loginProgressBar.visibility = View.VISIBLE
-            auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(applicationContext, "Welcome ${auth.currentUser?.displayName.toString()}", Toast.LENGTH_LONG).show()
-                    val intent = Intent(applicationContext, ProfileActivity::class.java)
-                    // It will totally clears all previous activity(s) and start new activity.
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    finish()
-                }
-            }.addOnFailureListener { exception ->
-                loginProgressBar.visibility = View.INVISIBLE
-                Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-            }
+    private fun changeFragment(fragment: Fragment, backStack: String?){
+        if(backStack != null){
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+                .replace(R.id.userOperationsLayout, fragment)
+                .addToBackStack(backStack)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
         }else{
-            Toast.makeText(applicationContext,"Email and Password cannot be empty.", Toast.LENGTH_LONG).show()
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+                .replace(R.id.userOperationsLayout, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
         }
     }
 
-    fun signUpButtonClicked(view : View){
-        val name = userFNameText.text.toString()
-        val email = userEmailText.text.toString()
-        val password = userPasswordText.text.toString()
-        val phone = userPhoneText.text.toString()
-
-        if(!validateSignUpInputs(name,email,password,phone)){
-            return
-        }
-
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener { task ->
-            if(task.isSuccessful){
-
-                auth.currentUser?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build()) // set display name
-
-                // save the current user to DATABASE
-                val user = User(name,email,phone)
-                FirebaseDatabase.getInstance().getReference("users")
-                    .child(auth.currentUser!!.uid)
-                    .setValue(user)
-
-                Toast.makeText(applicationContext,"Registration successful!", Toast.LENGTH_LONG).show()
-
-                onBackPressed()
-            }
-        }.addOnFailureListener { exception ->
-            Toast.makeText(applicationContext,exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-        }
-    }
-
-    fun resetPwdButtonClicked(view : View){
-        val resetMail = resetPwdMail.text.toString()
-
-        if(validateResetPwInput()){
-            auth.sendPasswordResetEmail(resetMail).addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    Toast.makeText(applicationContext, "Email sent!", Toast.LENGTH_LONG).show()
-                    onBackPressed()
-                }
-            }.addOnFailureListener { exception ->
-                Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    private fun validateSignUpInputs(name:String,email:String,password:String,phone:String):Boolean{
-
-        if(name.isEmpty()){
-            userFNameText.error = (getString(R.string.input_error_name))
-            userFNameText.requestFocus()
-            return false
-        }
-
-        if(email.isEmpty()){
-            userEmailText.error = (getString(R.string.input_error_email))
-            userEmailText.requestFocus()
-            return false
-        }
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            userEmailText.error = (getString(R.string.input_error_email_invalid))
-            userEmailText.requestFocus()
-            return false
-        }
-
-        if(phone.isEmpty()){
-            userPhoneText.error = (getString(R.string.input_error_phone))
-            userPhoneText.requestFocus()
-            return false
-        }
-
-        if(phone.length != 10){
-            userPhoneText.error = (getString(R.string.input_error_phone_invalid))
-            userPhoneText.requestFocus()
-            return false
-        }
-
-        if(password.isEmpty()){
-            userPasswordText.error = getString(R.string.input_error_password)
-            userPasswordText.requestFocus()
-            return false
-        }
-
-        if(password.length < 6){
-            userPasswordText.error = getString(R.string.input_error_password_length)
-            userPasswordText.requestFocus()
-            return false
-        }
-
-        if(!termsOfUseCheckBox.isChecked){
-            termsOfUseCheckBox.error = getString(R.string.input_error_checkBox_unchecked)
-            termsOfUseCheckBox.requestFocus()
-            return false
-        }
-
-        return true
-    }
-
-    private fun validateResetPwInput():Boolean{
-        if (resetPwdMail.text.toString().isEmpty()){
-            resetPwdMail.error = (getString(R.string.input_error_email))
-            resetPwdMail.requestFocus()
-            return false
-        }
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(resetPwdMail.text.toString()).matches()){
-            resetPwdMail.error = (getString(R.string.input_error_email_invalid))
-            resetPwdMail.requestFocus()
-            return false
-        }
-        return true
-    }
 
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount > 0){

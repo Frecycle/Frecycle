@@ -25,7 +25,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:onClick="resetPwdButtonClicked"
+            android:id="@+id/resetPwdButton"
             android:layout_marginTop="50dp"
             android:text="@string/reset_pwd"
             android:background="@drawable/button_drawable"
