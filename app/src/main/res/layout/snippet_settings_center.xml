@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -18,12 +19,10 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/textSettings"
             android:layout_marginTop="10dp"
             android:id="@+id/lvAccountSettings">
-
         </ListView>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 </merge>

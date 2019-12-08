@@ -1,9 +1,7 @@
 package io.github.frecycle.util
 
-import android.R
 import android.app.Activity
 import android.content.Context
-import android.provider.Settings.Global.getString
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -66,7 +64,7 @@ class FirebaseMethods {
         return result
     }
 
-    fun registerNewEmail(name :  String, password : String, email : String , phone : Long, activity : Activity){
+    fun registerNewEmail(name :  String, password : String, email : String , phone : Long){
 
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener { task ->
@@ -80,7 +78,11 @@ class FirebaseMethods {
 
                     Toast.makeText(context,"Registration successful. Please check your email!", Toast.LENGTH_LONG).show()
 
-                    activity.onBackPressed()
+                    // TODO delete this
+
+                    auth.signOut()
+
+                    (context as Activity).onBackPressed()
 
                 }
             }.addOnFailureListener { exception ->
@@ -100,7 +102,7 @@ class FirebaseMethods {
     }
 
     fun addNewUser(user_id : String, name : String, email : String, phone: Long){
-        val user : User = User(user_id,name,email,phone,0.0f,"","")
+        val user : User = User(user_id,name,email,phone,0.0f,0,"","None")
 
         databaseReference.child("users")
             .child(user_id)
@@ -125,6 +127,8 @@ class FirebaseMethods {
                     user.profile_photo = ds.child(user_id).getValue(User::class.java)!!.profile_photo
 
                     user.rank = ds.child(user_id).getValue(User::class.java)!!.rank
+
+                    user.voter = ds.child(user_id).getValue(User::class.java)!!.voter
 
                     user.user_id = ds.child(user_id).getValue(User::class.java)!!.user_id
 

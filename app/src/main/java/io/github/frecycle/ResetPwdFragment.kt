@@ -10,11 +10,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 
 class ResetPwdFragment : Fragment() {
     private lateinit var auth : FirebaseAuth
-    private lateinit var resetMail : TextView
+    private lateinit var resetMail : TextInputLayout
     private lateinit var resetPwdButton : Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,7 +29,7 @@ class ResetPwdFragment : Fragment() {
 
         resetPwdButton.setOnClickListener {
             if(validateResetPwInput()){
-                auth.sendPasswordResetEmail(resetMail.text.toString()).addOnCompleteListener { task ->
+                auth.sendPasswordResetEmail(resetMail.editText?.text.toString()).addOnCompleteListener { task ->
                     if(task.isSuccessful){
                         Toast.makeText(activity?.applicationContext, "Email sent!", Toast.LENGTH_LONG).show()
                         activity?.onBackPressed()
@@ -41,13 +43,13 @@ class ResetPwdFragment : Fragment() {
     }
 
     private fun validateResetPwInput():Boolean{
-        if (resetMail.text.toString().isEmpty()){
+        if (resetMail.editText?.text.toString().isEmpty()){
             resetMail.error = (getString(R.string.input_error_email))
             resetMail.requestFocus()
             return false
         }
 
-        if(!Patterns.EMAIL_ADDRESS.matcher(resetMail.text.toString()).matches()){
+        if(!Patterns.EMAIL_ADDRESS.matcher(resetMail.editText?.text.toString()).matches()){
             resetMail.error = (getString(R.string.input_error_email_invalid))
             resetMail.requestFocus()
             return false

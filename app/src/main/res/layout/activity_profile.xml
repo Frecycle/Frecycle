@@ -40,11 +40,10 @@
                     android:layout_height="30dp"
                     android:layout_marginEnd="20dp"
                     android:layout_gravity="end"
-                    android:id="@+id/profileMenu"
-                    android:background="@color/colorPrimary"
+                    android:id="@+id/settingsButton"
+                    android:background="@color/colorBackground"
                     android:src="@drawable/ic_ellipses"
                     android:clickable="true"
-                    android:onClick="profileMenuClicked"
                     android:focusable="true">
 
                 </ImageButton>
@@ -85,19 +84,36 @@
                         android:id="@+id/profileNameText"
                         android:text="@string/no_name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textColor="?attr/colorBackgroundFloating">
-                    </TextView>
+                        android:textColor="?attr/colorBackgroundFloating"/>
 
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:theme="@style/Theme.Rating"
-                        android:layout_marginBottom="5dp"
-                        android:numStars="5"
-                        android:clickable="true"
-                        android:focusable="true" />
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:theme="@style/Theme.Rating"
+                            android:numStars="5"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:id="@+id/voterNumber"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="?attr/colorBackgroundFloating">
+                        </TextView>
+
+                    </LinearLayout>
+
 
 
                 </LinearLayout>
@@ -112,7 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:tabGravity="fill"
-                        app:tabIndicatorColor="@color/colorPrimary">
+                        app:tabIndicatorColor="@color/colorBackground">
 
                     </com.google.android.material.tabs.TabLayout>
 

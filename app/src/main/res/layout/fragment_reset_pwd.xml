@@ -14,13 +14,18 @@
         android:layout_marginEnd="20dp">
 
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/resetPwdMail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"/>
 
         <Button
             android:layout_width="match_parent"
@@ -28,9 +33,9 @@
             android:id="@+id/resetPwdButton"
             android:layout_marginTop="50dp"
             android:text="@string/reset_pwd"
-            android:background="@drawable/button_drawable"
-            android:textSize="16sp"
-            android:textColor="@color/colorAccent" />
+            style="@style/customButtonStyle"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

@@ -32,7 +32,7 @@ class AccountActivity : AppCompatActivity() {
     }
 
     fun accountLoginClicked(view: View) {
-        val intent = Intent(applicationContext, SignInOutUpActivity::class.java)
+        val intent = Intent(applicationContext, SignInUpActivity::class.java)
         startActivity(intent)
     }
 

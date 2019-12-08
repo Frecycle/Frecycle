@@ -8,10 +8,12 @@
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:id="@+id/bottom_nav"
-        app:itemTextColor="@color/black"
+        app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:itemTextColor="@drawable/bottom_navigation_selector"
         app:labelVisibilityMode="labeled"
+        android:background="@color/white"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation"/>
 

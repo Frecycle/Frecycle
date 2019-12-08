@@ -8,17 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.TextView
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import io.github.frecycle.util.FirebaseMethods
 
 class SignUpFragment : Fragment() {
     private lateinit var firebaseMethods : FirebaseMethods
 
-    private lateinit var tvName : TextView
-    private lateinit var tvEmail : TextView
-    private lateinit var tvPhone : TextView
-    private lateinit var tvPassword : TextView
+    private lateinit var tvName : EditText
+    private lateinit var tvEmail : EditText
+    private lateinit var tvPhone : EditText
+    private lateinit var tvPassword : EditText
     private lateinit var cbTermsOfUse : CheckBox
 
 
@@ -27,10 +29,10 @@ class SignUpFragment : Fragment() {
 
         firebaseMethods = FirebaseMethods(activity!!)
 
-        tvName = view.findViewById(R.id.userFNameText)
-        tvEmail = view.findViewById(R.id.userEmailText)
-        tvPassword = view.findViewById(R.id.userPasswordText)
-        tvPhone = view.findViewById(R.id.userPhoneText)
+        tvName = view.findViewById<TextInputLayout>(R.id.userFNameText).editText!!
+        tvEmail = view.findViewById<TextInputLayout>(R.id.userEmailText).editText!!
+        tvPassword = view.findViewById<TextInputLayout>(R.id.userPasswordText).editText!!
+        tvPhone = view.findViewById<TextInputLayout>(R.id.userPhoneText).editText!!
         cbTermsOfUse = view.findViewById(R.id.termsOfUseCheckBox)
 
         val btnSignUp: Button = view.findViewById(R.id.signUpButton)
@@ -38,9 +40,7 @@ class SignUpFragment : Fragment() {
         btnSignUp.setOnClickListener{
 
             if(validateSignUpInputs(tvName.text.toString(),tvEmail.text.toString(),tvPassword.text.toString(),tvPhone.text.toString())){
-                firebaseMethods.registerNewEmail(tvName.text.toString(),tvPassword.text.toString(),tvEmail.text.toString(),tvPhone.text.toString().toLong(),
-                    activity!!
-                )
+                firebaseMethods.registerNewEmail(tvName.text.toString(),tvPassword.text.toString(),tvEmail.text.toString(),tvPhone.text.toString().toLong())
             }
         }
 

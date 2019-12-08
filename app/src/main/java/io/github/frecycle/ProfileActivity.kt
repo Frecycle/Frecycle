@@ -3,6 +3,7 @@ package io.github.frecycle
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
@@ -86,15 +87,16 @@ class ProfileActivity : AppCompatActivity() {
         val toolbar : Toolbar = findViewById(R.id.profileToolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        val settingsMenu: ImageButton =  findViewById(R.id.settingsButton)
+        settingsMenu.setOnClickListener {
+            val intent = Intent(applicationContext,SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     fun profilePhotoClicked(view: View) {
         val intent = Intent(applicationContext,ShowProfilePhotoActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun profileMenuClicked(view: View) {
-        val intent = Intent(applicationContext,SettingsActivity::class.java)
         startActivity(intent)
     }
 
@@ -108,14 +110,12 @@ class ProfileActivity : AppCompatActivity() {
         val ratingBar : RatingBar = findViewById(R.id.ratingBar)
         ratingBar.rating = user.rank
 
+        val voterNumber : TextView = findViewById(R.id.voterNumber)
+        voterNumber.text = "(" + user.voter.toString() + ")"
+
         val progressBar : ProgressBar = findViewById(R.id.profileProgressBar)
         progressBar.visibility = View.GONE
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-        overridePendingTransition(0, 0)
     }
 
     override fun onResume() {

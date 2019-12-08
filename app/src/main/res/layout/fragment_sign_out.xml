@@ -19,20 +19,17 @@
             android:textSize="20sp"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black"
-            android:id="@+id/tvConfirmSignout"
-            android:text="Are you sure you want to sign out?"/>
+            android:id="@+id/tvConfirmSignOut"
+            android:text="@string/wantToSignOut"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sign_out"
-            android:textSize="16sp"
-            android:id="@+id/btnConfirmSignout"
-            android:layout_below="@+id/tvConfirmSignout"
-            android:textColor="@color/colorAccent"
-            android:background="@drawable/button_drawable"
-            android:layout_marginTop="20dp"
-            android:textAllCaps="false"/>
+            android:id="@+id/btnConfirmSignOut"
+            style="@style/customButtonStyle"
+            android:layout_below="@+id/tvConfirmSignOut"
+            android:layout_marginTop="20dp"/>
 
 
     </RelativeLayout>

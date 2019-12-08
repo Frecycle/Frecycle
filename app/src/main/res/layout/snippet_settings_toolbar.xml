@@ -25,17 +25,15 @@
                     android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/backToProfileButton"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorBackground"
                     android:src="@drawable/ic_back_arrow"
-                    android:clickable="true"
-                    android:onClick="backToProfileClicked"
-                    android:focusable="true"/>
+                    android:onClick="backToProfileClicked" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_toRightOf="@id/backToProfileButton"
+                    android:layout_toEndOf="@id/backToProfileButton"
                     android:layout_centerVertical="true"
                     android:text="@string/options"
                     android:textSize="20sp"

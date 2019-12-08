@@ -52,6 +52,7 @@ class BottomNavigationViewHelper {
 
                     R.id.navigation_myAccount -> {
                         if(activity !is AccountActivity || activity !is ProfileActivity){
+                            //TODO register olduktan sonra currentuser null olmuyor ve profile'e gidiyor
                             if(auth.currentUser == null){
                                 val intent = Intent(applicationContext, AccountActivity::class.java)
                                 applicationContext.startActivity(intent)
@@ -68,5 +69,7 @@ class BottomNavigationViewHelper {
             }
         }
     }
+
+
 
 }

@@ -1,25 +1,30 @@
 <resources>
     <string name="app_name">Frecycle</string>
     <string name="welcome_back">Welcome Back</string>
-    <string name="team">By Frecycle Team</string>
+    <string name="slogan">New recycles are waiting for you</string>
     <string name="skip">Skip</string>
     <string name="name">Full Name</string>
     <string name="number">Phone Number</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
+    <string name="city">City</string>
     <string name="password">Password</string>
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="fav">Favorites</string>
     <string name="myAccount">My Account</string>
     <string name="accountLoginText">To see your account, please login. You can view your orders in My Account section.</string>
+    <string name="noAccount">Don\'t have an account?</string>
     <string name="settings">Account Settings</string>
     <string name="options">Options</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="editProfile_description">Organize your account settings</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_out">Sign Out</string>
+    <string name="wantToSignOut">Are you sure you want to sign out?</string>
+    <string name="signOut_Description">Exit from your account</string>
     <string name="reset_pwd">Reset Password</string>
-    <string name="termsOfUse">I have accepted the terms of use Frecycle ®</string>
+    <string name="terms_Of_Use">I have accepted the terms of use Frecycle ®</string>
     <string name="input_error_name">name required</string>
     <string name="input_error_email">email required</string>
     <string name="input_error_password">password required</string>
@@ -38,7 +43,11 @@
     <string name="change_photo">Change Photo</string>
     <string name="no_name">No Name</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="city_array">
+        <item>None</item>
+        <item>Eskişehir</item>
+        <item>Ankara</item>
+        <item>İstanbul</item>
+    </string-array>
 
 </resources>

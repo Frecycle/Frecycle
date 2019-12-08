@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
@@ -28,8 +29,8 @@ class LoginFragment : Fragment() {
         setupFirebaseAuth()
 
         btnLogin.setOnClickListener{
-            email = view.findViewById<TextView>(R.id.userEmailText).text.toString()
-            password = view.findViewById<TextView>(R.id.passwordText).text.toString()
+            email = view.findViewById<TextInputLayout>(R.id.userEmailText).editText?.text.toString()
+            password = view.findViewById<TextInputLayout>(R.id.passwordText).editText?.text.toString()
             loginProgressBar = view.findViewById(R.id.loginProgressBar)
 
             if(!email.isBlank() && !password.isEmpty()) {

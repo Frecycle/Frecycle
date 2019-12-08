@@ -24,11 +24,11 @@ class SignOutFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view : View = inflater.inflate(R.layout.fragment_sign_out, container, false)
 
-        tvSignOut = view.findViewById(R.id.tvConfirmSignout)
+        tvSignOut = view.findViewById(R.id.tvConfirmSignOut)
         mProgressBar = view.findViewById(R.id.progressBar)
         tvSigningOut = view.findViewById(R.id.tvSigningOut)
 
-        val btnConfirmSignOut: Button = view.findViewById(R.id.btnConfirmSignout)
+        val btnConfirmSignOut: Button = view.findViewById(R.id.btnConfirmSignOut)
 
         setupFirebaseAuth()
 

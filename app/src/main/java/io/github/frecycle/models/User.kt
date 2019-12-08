@@ -6,6 +6,7 @@ class User {
     lateinit var email: String
     var phone: Long = 0
     var rank : Float = 0.0f
+    var voter : Int = 0
     lateinit var profile_photo : String
     lateinit var city : String
 
@@ -16,6 +17,7 @@ class User {
         email: String,
         phone: Long,
         rank: Float,
+        voter: Int,
         profile_photo: String,
         city: String
     ) {
@@ -24,12 +26,13 @@ class User {
         this.email = email
         this.phone = phone
         this.rank = rank
+        this.voter = voter
         this.profile_photo = profile_photo
         this.city = city
     }
 
     override fun toString(): String {
-        return "User(user_id='$user_id', name='$name', email='$email', phone=$phone, rank=$rank, profile_photo='$profile_photo', city='$city')"
+        return "User(user_id='$user_id', name='$name', email='$email', phone=$phone, rank=$rank, voter=$voter, profile_photo='$profile_photo', city='$city')"
     }
 
 

@@ -25,10 +25,8 @@
                     android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/backToOptionsMenu"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorBackground"
                     android:src="@drawable/ic_back_arrow"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:onClick="backToSettingsClicked"/>
 
                 <TextView
@@ -49,12 +47,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
                     android:id="@+id/saveChanges"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorBackground"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_checkmark"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:src="@drawable/ic_checkmark"/>
 
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>

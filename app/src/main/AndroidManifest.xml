@@ -14,7 +14,7 @@
         <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".ShowProfilePhotoActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".SignInOutUpActivity" />
+        <activity android:name=".SignInUpActivity" />
         <activity android:name=".AccountActivity" />
         <activity android:name=".FavoritesActivity" />
         <activity android:name=".SearchActivity" />
