@@ -3,6 +3,8 @@ package io.github.frecycle.util
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -64,8 +66,8 @@ class FirebaseMethods {
         return result
     }
 
-    fun registerNewEmail(name :  String, password : String, email : String , phone : Long){
-
+    fun registerNewEmail(name :  String, password : String, email : String , phone : Long, progressBar: ProgressBar){
+        progressBar.visibility = View.VISIBLE
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful){
@@ -81,11 +83,12 @@ class FirebaseMethods {
                     // TODO delete this
 
                     auth.signOut()
-
+                    progressBar.visibility = View.INVISIBLE
                     (context as Activity).onBackPressed()
 
                 }
             }.addOnFailureListener { exception ->
+                progressBar.visibility = View.INVISIBLE
                 Toast.makeText(context,exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
             }
     }
@@ -102,7 +105,7 @@ class FirebaseMethods {
     }
 
     fun addNewUser(user_id : String, name : String, email : String, phone: Long){
-        val user : User = User(user_id,name,email,phone,0.0f,0,"","None")
+        val user : User = User(user_id,name,email,phone,0.0f,0,"None","None")
 
         databaseReference.child("users")
             .child(user_id)
@@ -138,6 +141,13 @@ class FirebaseMethods {
             }
         }
         return user
+    }
+
+    fun updateEmail(email:String) {
+        databaseReference.child("users")
+            .child(user_id)
+            .child("email")
+            .setValue(email)
     }
 
 

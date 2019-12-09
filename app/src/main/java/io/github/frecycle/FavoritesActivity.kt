@@ -1,5 +1,6 @@
 package io.github.frecycle
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
@@ -27,6 +28,14 @@ class FavoritesActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         BottomNavigationViewHelper.Check.checkMenuItem(bottomNavigation,activityNum)
+    }
+
+    override fun onBackPressed() {
+        val startMainAcivity = Intent(applicationContext,HomeActivity::class.java)
+        startMainAcivity.addCategory(Intent.CATEGORY_HOME)
+        startMainAcivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMainAcivity)
+
     }
 
 }

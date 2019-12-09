@@ -13,13 +13,17 @@
         android:theme="@style/AppTheme">
         <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".ShowProfilePhotoActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".SignInUpActivity" />
-        <activity android:name=".AccountActivity" />
-        <activity android:name=".FavoritesActivity" />
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".FeedActivity" />
+        <activity android:name=".ProfileActivity" android:noHistory="true"/>
+        <activity android:name=".SignInUpActivity" android:parentActivityName=".AccountActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AccountActivity"/>
+
+        </activity>
+        <activity android:name=".AccountActivity" android:noHistory="true" />
+        <activity android:name=".FavoritesActivity" android:noHistory="true" />
+        <activity android:name=".SearchActivity" android:noHistory="true" />
+        <activity android:name=".HomeActivity" android:noHistory="true" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

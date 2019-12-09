@@ -1,4 +1,4 @@
-package io.github.frecycle
+package io.github.frecycle.util
 /*
 
 

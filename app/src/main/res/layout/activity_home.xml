@@ -8,22 +8,18 @@
 
     <include layout="@layout/snippet_bottom_nav_bar"></include>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/relative_layout"
-        android:layout_above="@id/bottom_nav">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/homeTextView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleViewHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Home Activity"
-            android:layout_centerVertical="true"
-            android:textAlignment="center"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent">
 
-    </RelativeLayout>
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package io.github.frecycle
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -8,7 +9,7 @@ import io.github.frecycle.util.BottomNavigationViewHelper
 
 
 class SearchActivity : AppCompatActivity() {
-    lateinit private var staggeredLayoutManager: StaggeredGridLayoutManager
+    private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
     private lateinit var bottomNavigation : BottomNavigationViewEx
     private val activityNum : Int = 1
 
@@ -22,7 +23,7 @@ class SearchActivity : AppCompatActivity() {
 
         //LayoutManager
         staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        list.layoutManager = staggeredLayoutManager
+       //???? list.layoutManager = staggeredLayoutManager
     }
 
     override fun onPause() {
@@ -30,11 +31,16 @@ class SearchActivity : AppCompatActivity() {
         overridePendingTransition(0,0)
     }
 
-
     override fun onResume() {
         super.onResume()
         BottomNavigationViewHelper.Check.checkMenuItem(bottomNavigation,activityNum)
     }
 
+    override fun onBackPressed() {
+        val startMainAcivity = Intent(applicationContext,HomeActivity::class.java)
+        startMainAcivity.addCategory(Intent.CATEGORY_HOME)
+        startMainAcivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMainAcivity)
+    }
 
 }

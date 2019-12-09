@@ -122,4 +122,16 @@ class ProfileActivity : AppCompatActivity() {
         super.onResume()
         BottomNavigationViewHelper.Check.checkMenuItem(bottomNavigation, activityNum)
     }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0,0)
+    }
+
+    override fun onBackPressed() {
+        val startMainAcivity = Intent(applicationContext,HomeActivity::class.java)
+        startMainAcivity.addCategory(Intent.CATEGORY_HOME)
+        startMainAcivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMainAcivity)
+    }
 }

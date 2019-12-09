@@ -19,13 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:layout_width="match_parent"
@@ -35,7 +38,7 @@
             android:text="@string/reset_pwd"
             style="@style/customButtonStyle"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+
 
     </LinearLayout>
 

@@ -6,10 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import io.github.frecycle.util.FirebaseMethods
@@ -39,9 +36,12 @@ class SignUpFragment : Fragment() {
 
         btnSignUp.setOnClickListener{
 
+            val progressBar : ProgressBar = view.findViewById(R.id.signUpProgressBar)
+
             if(validateSignUpInputs(tvName.text.toString(),tvEmail.text.toString(),tvPassword.text.toString(),tvPhone.text.toString())){
-                firebaseMethods.registerNewEmail(tvName.text.toString(),tvPassword.text.toString(),tvEmail.text.toString(),tvPhone.text.toString().toLong())
+                firebaseMethods.registerNewEmail(tvName.text.toString(),tvPassword.text.toString(),tvEmail.text.toString(),tvPhone.text.toString().toLong(), progressBar)
             }
+
         }
 
         return view

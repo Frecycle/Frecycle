@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -23,14 +20,35 @@ class EditProfileFragment : Fragment() {
     private lateinit var reference: DatabaseReference
     private lateinit var methods : FirebaseMethods
     private lateinit var userId : String
+    private lateinit var user : User
+
+    //widgets
+    private lateinit var tvDisplayName : TextView
+    private lateinit var tvEditEmail : TextView
+    private lateinit var spEditCity : Spinner
+    private lateinit var tvEditPhone : TextView
+    private lateinit var checkmark : ImageButton
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view : View = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
         setupCitySpinner(view)
         setupFirebaseAuth()
+        initializeWidgets(view)
+
+        checkmark.setOnClickListener{
+            saveProfileSettings()
+        }
 
         return view
+    }
+
+    private fun initializeWidgets(view: View){
+        tvDisplayName = view.findViewById(R.id.editDisplayName)
+        tvEditEmail = view.findViewById(R.id.editEmail)
+        spEditCity = view.findViewById(R.id.editCity)
+        tvEditPhone = view.findViewById(R.id.editPhone)
+        checkmark = view.findViewById(R.id.saveProfileChanges)
     }
 
     private fun setupFirebaseAuth(){
@@ -51,53 +69,67 @@ class EditProfileFragment : Fragment() {
         })
     }
 
+    // sets widgets with data coming from database
     private fun initializeUserData(user : User){
         val photoView : CircularImageView = view!!.findViewById(R.id.profilePhoto)
         UniversalImageLoader.setImage(user.profile_photo,photoView,null,"")
 
-        val name : TextView = view!!.findViewById(R.id.editDisplayName)
-        name.text = user.name
+        this.user = user
 
-        val email : TextView = view!!.findViewById(R.id.editEmail)
-        email.text = user.email
-
-        val city : Spinner = view!!.findViewById(R.id.editCity)
-        city.setSelection(resources.getStringArray(R.array.city_array).indexOf(user.city))
-
-        val phone : TextView = view!!.findViewById(R.id.editPhone)
-        phone.text = user.phone.toString()
+        tvDisplayName.text = user.name
+        tvEditEmail.text = user.email
+        spEditCity.setSelection(resources.getStringArray(R.array.city_array).indexOf(user.city))
+        tvEditPhone.text = user.phone.toString()
 
     }
 
     private fun saveProfileSettings(){
-        val email = (view!!.findViewById(R.id.editEmail) as TextView).text
-
-
+        val email = tvEditEmail.text.toString()
+        val phone = tvEditPhone.text.toString()
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val user : User = User()
-                for (ds : DataSnapshot in dataSnapshot.child("users").children){
-                    if (ds.key!!.equals(userId)){
-                        user.email = ds.getValue(User::class.java)!!.email
-                        user.phone = ds.getValue(User::class.java)!!.phone
-                    }
+                // case 1: user made a change to their email
+                if(!user.email.equals(email)){
+                    checkIfEmailExists(email)
                 }
-
-                // case 1: user did not change their email
-                if(user.email.equals(email)){
+                // case 2 : user changed their phone
+                if(user.phone.equals(phone)){
 
                 }
-                // case 2 : user changed their email
-                else{
-
-                }
-
-
             }
 
             override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented")
+            }
+        })
+    }
+
+    /***
+     * Email veritabanında varsa ekliyor
+     */
+    private fun checkIfEmailExists(email: String){
+        val query : Query = reference.child("users")
+            .orderByChild("email")
+            .equalTo(user.email)
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    // update email
+                    methods.updateEmail(email)
+                    Toast.makeText(activity,"Saved email",Toast.LENGTH_SHORT).show()
+                }
+
+                for(singleSnapshot : DataSnapshot in dataSnapshot.children){
+                    if(singleSnapshot.exists()){
+                        Toast.makeText(activity,"That email already exists",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
     }
