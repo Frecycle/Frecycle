@@ -9,10 +9,6 @@ tools:context=".SearchActivity">
 
 <include layout="@layout/snippet_bottom_nav_bar"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"

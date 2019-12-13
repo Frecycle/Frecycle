@@ -42,6 +42,13 @@
 
     <string name="change_photo">Change Photo</string>
     <string name="no_name">No Name</string>
+    <string name="products">Products</string>
+    <string name="add_product">Add Product</string>
+    <string name="product_name">Product Name</string>
+    <string name="product_owner">Product Owner</string>
+    <string name="product_description">Product Description</string>
+    <string name="date_format">dd.MM.yyyy HH:mm</string>
+    <string name="send_request">Send Request</string>
 
     <string-array name="city_array">
         <item>None</item>

@@ -6,18 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <include layout="@layout/snippet_bottom_nav_bar"></include>
+    <include layout="@layout/snippet_bottom_nav_bar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleViewHome"
+        <include layout="@layout/snippet_home_toolbar"/>
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleViewHome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <Button
+                android:id="@+id/addProductButton"
+                android:layout_width="220dp"
+                android:layout_height="45dp"
+                style="@style/customButtonStyle"
+                android:drawableStart="@drawable/ic_photo_camera_white"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:layout_marginBottom="80dp"
+                android:layout_gravity="bottom|center"
+                android:text="@string/add_product">
+            </Button>
+
+        </FrameLayout>
+
+
 
 
     </LinearLayout>
