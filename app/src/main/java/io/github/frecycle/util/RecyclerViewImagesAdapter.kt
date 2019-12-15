@@ -36,16 +36,10 @@ class RecyclerViewImagesAdapter() : RecyclerView.Adapter<RecyclerViewImagesAdapt
     class MyViewHolder : RecyclerView.ViewHolder {
         var productCoverImage : ImageView
         var progressBar : ProgressBar
-        var item : RecyclerViewItem
 
         constructor(itemView: View) : super(itemView){
             productCoverImage = itemView.findViewById(R.id.imageViewProduct)
             this.progressBar = itemView.findViewById(R.id.progressBar4Item)
-
-            itemView.setOnClickListener {
-                val intent = Intent(context, AddProductActivity::class.java)
-                startActivity(intent)
-            }
         }
 
     }

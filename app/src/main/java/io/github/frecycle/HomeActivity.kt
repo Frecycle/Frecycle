@@ -46,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
 
         //TODO SİLİNECEK
         addProductButton.setOnClickListener{
-            val intent = Intent(applicationContext, ProductActivity::class.java)
+            val intent = Intent(applicationContext, AddProductActivity::class.java)
             startActivity(intent)
         }
 
