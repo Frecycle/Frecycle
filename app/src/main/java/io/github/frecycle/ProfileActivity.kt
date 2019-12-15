@@ -129,9 +129,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val startMainAcivity = Intent(applicationContext,HomeActivity::class.java)
-        startMainAcivity.addCategory(Intent.CATEGORY_HOME)
-        startMainAcivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(startMainAcivity)
+        val startMainActivity = Intent(applicationContext,HomeActivity::class.java)
+        startMainActivity.addCategory(Intent.CATEGORY_HOME)
+        startMainActivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMainActivity)
     }
 }

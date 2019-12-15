@@ -11,13 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ProductActivity"></activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ShowProfilePhotoActivity" />
         <activity
-            android:name=".ProfileActivity"
-            android:noHistory="true" />
+            android:name=".ProfileActivity" />
         <activity
             android:name=".SignInUpActivity"
             android:parentActivityName=".AccountActivity">
@@ -26,17 +26,14 @@
                 android:value=".AccountActivity" />
         </activity>
         <activity
-            android:name=".AccountActivity"
-            android:noHistory="true" />
+            android:name=".AccountActivity" />
         <activity
-            android:name=".FavoritesActivity"
-            android:noHistory="true" />
+            android:name=".FavoritesActivity" />
         <activity
-            android:name=".SearchActivity"
-            android:noHistory="true" />
+            android:name=".SearchActivity" />
         <activity
-            android:name=".HomeActivity"
-            android:noHistory="true" />
+            android:name=".HomeActivity" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
