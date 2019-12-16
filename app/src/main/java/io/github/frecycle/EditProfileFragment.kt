@@ -46,7 +46,7 @@ class EditProfileFragment : Fragment() {
     private fun initializeWidgets(view: View){
         tvDisplayName = view.findViewById(R.id.editDisplayName)
         tvEditEmail = view.findViewById(R.id.editEmail)
-        spEditCity = view.findViewById(R.id.editCity)
+        spEditCity = view.findViewById(R.id.editCitySpinner)
         tvEditPhone = view.findViewById(R.id.editPhone)
         checkmark = view.findViewById(R.id.saveProfileChanges)
     }
@@ -135,7 +135,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun setupCitySpinner(view : View) {
-        val citySpinner: Spinner = view.findViewById(R.id.editCity)
+        val citySpinner: Spinner = view.findViewById(R.id.editCitySpinner)
         val staticAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             view.context,
             R.array.city_array,

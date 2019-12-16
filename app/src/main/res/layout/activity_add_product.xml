@@ -2,7 +2,6 @@
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,24 +9,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
 
         <ImageView
             android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
             android:src="@drawable/ic_add_photo_black"
-            android:id="@+id/ivAddPhotos"
-            />
+            android:id="@+id/ivAddPhotos"/>
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/title"
@@ -36,36 +34,33 @@
             android:layout_marginEnd="20dp"/>
 
         <Spinner
+            android:id="@+id/editCategorySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:spinnerMode="dropdown"
-            android:id="@+id/editCategory"
-
-            />
+            android:spinnerMode="dropdown" />
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/description"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:maxLength="200"
-            />
+            android:maxLength="200" />
 
         <Spinner
+            android:id="@+id/editCitySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:spinnerMode="dropdown"
-            android:id="@+id/editCity"
+            android:spinnerMode="dropdown" />
 
-            />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,12 +69,9 @@
             android:text="@string/Upload"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:id="@+id/uploadProductButton"
-            />
-
+            android:id="@+id/uploadProductButton" />
 
     </LinearLayout>
-
 
 </ScrollView>
 

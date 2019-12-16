@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import com.nostra13.universalimageloader.core.ImageLoader
-import io.github.frecycle.models.Product
 import io.github.frecycle.util.*
 import kotlin.system.exitProcess
 
@@ -30,6 +29,7 @@ class HomeActivity : AppCompatActivity() {
 
     private var backPressedTime : Long = 0
     private val activityNum : Int = 0
+    private val productsImages : LinkedHashMap<String,String> = LinkedHashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,19 +60,17 @@ class HomeActivity : AppCompatActivity() {
         reference = database.reference
         methods = FirebaseMethods(this)
 
-        val list : ArrayList<String> = ArrayList()
-
         val query : Query = reference.child("products_photos")
 
         query.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(singleSnapshot : DataSnapshot in dataSnapshot.children){
                     for(ss : DataSnapshot in singleSnapshot.children){
-                        list.add(ss.value.toString())
+                        productsImages[singleSnapshot.key.toString()] = ss.value.toString()
                         break
                     }
                 }
-                initializeRecyclerViewHome(list)
+                initializeRecyclerViewHome(ArrayList(productsImages.values))
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -86,6 +84,13 @@ class HomeActivity : AppCompatActivity() {
         val recyclerViewImagesAdapter = RecyclerViewImagesAdapter(this, list)
         recyclerView.layoutManager = GridLayoutManager(this,2)
         recyclerView.adapter = recyclerViewImagesAdapter
+
+        recyclerViewImagesAdapter.setOnItemClickListener(object: RecyclerViewImagesAdapter.OnItemClickListener{
+            override fun onItemClick(position: Int) {
+
+                Toast.makeText(applicationContext, "Clicked Item Id :" + productsImages.keys.toTypedArray()[position], Toast.LENGTH_LONG).show()
+            }
+        })
 
         val progressBar : ProgressBar = findViewById(R.id.homeProgressBar)
         progressBar.visibility = View.GONE
@@ -119,28 +124,4 @@ class HomeActivity : AppCompatActivity() {
 
         backPressedTime = System.currentTimeMillis()
     }
-
-/*    private fun tryCardView(){
-        val list : ArrayList<Product> =  ArrayList()
-        val photoList : ArrayList<String> = ArrayList()
-
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel,photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel2,photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel3, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel4, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel2, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel3, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel4, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel2, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel, photoList))
-        list.add(Product("1","parfume","Chanel N5 Fragrance", "Now its free",R.drawable.chanel3, photoList))
-
-
-        val recyclerView : RecyclerView = findViewById(R.id.recycleViewHome)
-        val recycleViewAdapter : RecyclerViewAdapter = RecyclerViewAdapter(this, list)
-        recyclerView.layoutManager = GridLayoutManager(this,2)
-        recyclerView.adapter = recycleViewAdapter
-    }*/
-
 }

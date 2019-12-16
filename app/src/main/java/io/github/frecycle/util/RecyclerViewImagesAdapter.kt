@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.view.menu.MenuView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,7 @@ import io.github.frecycle.models.Product
 class RecyclerViewImagesAdapter() : RecyclerView.Adapter<RecyclerViewImagesAdapter.MyViewHolder>() {
     private lateinit var context: Context
     private lateinit var productsImages : ArrayList<String>
+    private lateinit var mListener: OnItemClickListener
 
     constructor(context: Context?, productsImages: ArrayList<String>?) : this() {
         this.context = context!!
@@ -37,17 +39,31 @@ class RecyclerViewImagesAdapter() : RecyclerView.Adapter<RecyclerViewImagesAdapt
         var productCoverImage : ImageView
         var progressBar : ProgressBar
 
-        constructor(itemView: View) : super(itemView){
+
+        constructor(itemView: View, listener: OnItemClickListener) : super(itemView){
             productCoverImage = itemView.findViewById(R.id.imageViewProduct)
             this.progressBar = itemView.findViewById(R.id.progressBar4Item)
+
+
+            itemView.setOnClickListener(object : View.OnClickListener{
+                override fun onClick(v: View?) {
+                    if (v != null){
+                        val position = adapterPosition
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position)
+                        }
+                    }
+                }
+            } )
         }
+
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater : LayoutInflater = LayoutInflater.from(context)
         val view: View = inflater.inflate(R.layout.snippet_cardview_item_home,parent,false)
-        return MyViewHolder(view)
+        return MyViewHolder(view, mListener)
     }
 
     override fun getItemCount(): Int {
@@ -77,4 +93,11 @@ class RecyclerViewImagesAdapter() : RecyclerView.Adapter<RecyclerViewImagesAdapt
 
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.mListener = listener
+    }
 }

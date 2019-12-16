@@ -52,6 +52,12 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="Upload">Upload</string>
+    <string name="NoSelectedPhoto">Product image is mandatory!</string>
+    <string name="NoProductDescription">Please write product description!</string>
+    <string name="NoProductTitle">Please write product title!</string>
+    <string name="NoProductCity">Please select a city!</string>
+    <string name="photoUploaded">Photo uploaded successfully!</string>
+    <string name="productIsAdded">Product is added successfully :)</string>
 
     <string-array name="city_array">
         <item>None</item>
