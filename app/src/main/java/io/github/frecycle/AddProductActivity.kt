@@ -103,6 +103,7 @@ class AddProductActivity : AppCompatActivity() {
 
     }
 
+    // store image and call database function
     private fun storeProductInformation() {
 
         loadingBar.setTitle("Adding New Product")
@@ -119,6 +120,7 @@ class AddProductActivity : AppCompatActivity() {
         val currentTime = SimpleDateFormat("HH:mm:ss a")
         saveCurrentTime = currentTime.format(calendar.time)
 
+        //actually photo name
         productKey = saveCurrentDate + saveCurrentTime
 
         val filePath = storageReference.child("products_photos").child(imageUri.lastPathSegment + productKey + ".jpg")
@@ -147,34 +149,58 @@ class AddProductActivity : AppCompatActivity() {
 
     private fun saveProductInfoToDatabase() {
         val productMap : HashMap<String, Any> = HashMap()
+        val productId : String = databaseReference.push().key!!
 
         productMap.put("category", productCategory.selectedItem.toString())
         productMap.put("city", productCity.selectedItem.toString())
         productMap.put("date", saveCurrentDate)
         productMap.put("time", saveCurrentTime)
-        productMap.put("title", productTitle.text.toString())
+        productMap.put("product_name", productTitle.text.toString())
         productMap.put("description",productDescription.text.toString())
-        productMap.put("product_id", productKey)
+        productMap.put("product_id", productId)
+        productMap.put("owner", auth.currentUser!!.uid)
 
-        val productId : String = databaseReference.push().key!!
-
+        // products tree
         databaseReference.child("products").child(productId).setValue(productMap).addOnCompleteListener { object: OnCompleteListener<Void>{
             override fun onComplete(task: Task<Void>) {
                 if(task.isSuccessful){
                     Toast.makeText(this@AddProductActivity,getString(R.string.productIsAdded),Toast.LENGTH_LONG).show()
+                    Log.d("AddProductActivity", "product object is added to 'products' database")
                 }else{
                     Toast.makeText(this@AddProductActivity,"Error: " + task.exception.toString(),Toast.LENGTH_LONG).show()
+                    Log.e("AddProductActivity", "Error: product object cannot be added to 'products' database")
                 }
             }
         } }
-
+        // products_photos tree
         val productImagesMap : HashMap<String, Any> = HashMap()
 
         productImagesMap.put(productKey, downloadPhotoURL)
 
-        databaseReference.child("products_photos").child(productId).setValue(productImagesMap)
+        databaseReference.child("products_photos").child(productId).setValue(productImagesMap).addOnCompleteListener { object: OnCompleteListener<Void>{
+            override fun onComplete(task: Task<Void>) {
+                if(task.isSuccessful){
+                    Toast.makeText(this@AddProductActivity,getString(R.string.productIsAdded),Toast.LENGTH_LONG).show()
+                    Log.d("AddProductActivity", "product image urls is added to 'products_photos' database")
+                }else{
+                    Toast.makeText(this@AddProductActivity,"Error: " + task.exception.toString(),Toast.LENGTH_LONG).show()
+                    Log.e("AddProductActivity", "Error: product image urls cannot be added to 'products_photos' database")
+                }
+            }
+        } }
 
-        databaseReference.child("user_products").child(auth.currentUser!!.uid).push().setValue(productId)
+        // user_products tree
+        databaseReference.child("user_products").child(auth.currentUser!!.uid).push().setValue(productId).addOnCompleteListener{ object: OnCompleteListener<Void>{
+            override fun onComplete(task: Task<Void>) {
+                if(task.isSuccessful){
+                    Toast.makeText(this@AddProductActivity,getString(R.string.productIsAdded),Toast.LENGTH_LONG).show()
+                    Log.d("AddProductActivity", "product id is added to 'user_products' database")
+                }else{
+                    Toast.makeText(this@AddProductActivity,"Error: " + task.exception.toString(),Toast.LENGTH_LONG).show()
+                    Log.e("AddProductActivity", "Error: product id cannot be added to 'user_products' database")
+                }
+            }
+        } }
 
         loadingBar.dismiss()
         finish()

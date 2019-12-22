@@ -96,6 +96,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/productDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/product_description"
@@ -105,6 +106,7 @@
             android:textSize="15sp"/>
 
         <TextView
+            android:id="@+id/productDateAndTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/date_format"

@@ -10,11 +10,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.database.*
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import com.mikhaellopez.circularimageview.CircularImageView
 import io.github.frecycle.models.User
 import io.github.frecycle.util.BottomNavigationViewHelper
@@ -35,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     private lateinit var selectionsPagerAdapter: SelectionsPagerAdapter
-    private lateinit var bottomNavigation : BottomNavigationViewEx
+    private lateinit var bottomNavigation : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

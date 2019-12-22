@@ -58,6 +58,7 @@
     <string name="NoProductCity">Please select a city!</string>
     <string name="photoUploaded">Photo uploaded successfully!</string>
     <string name="productIsAdded">Product is added successfully :)</string>
+    <string name="should_sign_in">You should login to make this operation!</string>
 
     <string-array name="city_array">
         <item>None</item>

@@ -3,12 +3,12 @@ package io.github.frecycle
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.frecycle.util.BottomNavigationViewHelper
 
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var bottomNavigation : BottomNavigationViewEx
+    private lateinit var bottomNavigation : BottomNavigationView
     private val activityNum : Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {

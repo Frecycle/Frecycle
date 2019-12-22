@@ -10,9 +10,9 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import com.nostra13.universalimageloader.core.ImageLoader
 import io.github.frecycle.util.*
 import kotlin.system.exitProcess
@@ -23,7 +23,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var reference: DatabaseReference
     private lateinit var methods: FirebaseMethods
 
-    private lateinit var bottomNavigation : BottomNavigationViewEx
+    private lateinit var bottomNavigation : BottomNavigationView
     private lateinit var backToast: Toast
     private lateinit var addProductButton : Button
 
@@ -44,10 +44,16 @@ class HomeActivity : AppCompatActivity() {
 
         addProductButton = findViewById(R.id.addProductButton)
 
-        //TODO SİLİNECEK
         addProductButton.setOnClickListener{
-            val intent = Intent(applicationContext, AddProductActivity::class.java)
-            startActivity(intent)
+            if(auth.currentUser != null){
+                val intent = Intent(applicationContext, AddProductActivity::class.java)
+                startActivity(intent)
+            }else{
+                Toast.makeText(applicationContext, getString(R.string.should_sign_in), Toast.LENGTH_LONG).show()
+                val intent = Intent(applicationContext, SignInUpActivity::class.java)
+                startActivity(intent)
+            }
+
         }
 
         initImageLoader()
@@ -88,7 +94,10 @@ class HomeActivity : AppCompatActivity() {
         recyclerViewImagesAdapter.setOnItemClickListener(object: RecyclerViewImagesAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
 
-                Toast.makeText(applicationContext, "Clicked Item Id :" + productsImages.keys.toTypedArray()[position], Toast.LENGTH_LONG).show()
+                //Toast.makeText(applicationContext, "Clicked Item Id :" + productsImages.keys.toTypedArray()[position], Toast.LENGTH_LONG).show()
+                val intent = Intent(applicationContext, ProductActivity::class.java)
+                intent.putExtra("productId", productsImages.keys.toTypedArray()[position])
+                startActivity(intent)
             }
         })
 

@@ -8,7 +8,13 @@ class Product {
     lateinit var city : String
     lateinit var date : String
     lateinit var time: String
+    lateinit var owner: String
 
+
+
+
+    constructor(){
+    }
 
     constructor(
         product_id: String,
@@ -17,7 +23,8 @@ class Product {
         description: String,
         city: String,
         date: String,
-        time: String
+        time: String,
+        owner: String
     ) {
         this.product_id = product_id
         this.category = category
@@ -26,11 +33,8 @@ class Product {
         this.city = city
         this.date = date
         this.time = time
+        this.owner = owner
     }
-
-    constructor(){
-    }
-
 
 
 }

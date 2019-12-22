@@ -31,11 +31,7 @@ class SignInUpActivity : AppCompatActivity() {
         if(supportFragmentManager.backStackEntryCount > 0){
             supportFragmentManager.popBackStack()
         }else{
-            //TODO nohistory account activity erişilemediği için uygulamadan çıkıyor
-            val backActivity = Intent(applicationContext,AccountActivity::class.java)
-            startActivity(backActivity)
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-            finish()
+            super.onBackPressed()
         }
     }
 

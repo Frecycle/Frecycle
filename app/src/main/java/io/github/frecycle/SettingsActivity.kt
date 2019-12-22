@@ -8,7 +8,6 @@ import android.widget.ListView
 import android.widget.RelativeLayout
 import android.widget.SimpleAdapter
 import androidx.viewpager.widget.ViewPager
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import io.github.frecycle.util.BottomNavigationViewHelper
 import io.github.frecycle.util.SelectionsStatePagerAdapter
 

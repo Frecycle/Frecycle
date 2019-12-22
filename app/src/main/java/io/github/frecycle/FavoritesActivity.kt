@@ -3,11 +3,12 @@ package io.github.frecycle
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import io.github.frecycle.util.BottomNavigationViewHelper
 
 class FavoritesActivity : AppCompatActivity() {
-    private lateinit var bottomNavigation : BottomNavigationViewEx
+    private lateinit var bottomNavigation : BottomNavigationView
     private val activityNum : Int = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {

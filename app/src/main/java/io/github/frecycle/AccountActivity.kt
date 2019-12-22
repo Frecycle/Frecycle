@@ -4,13 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.frecycle.util.BottomNavigationViewHelper
 
 class AccountActivity : AppCompatActivity() {
-    private lateinit var bottomNavigation: BottomNavigationViewEx
+    private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var signInUpActivity: SignInUpActivity
     private val activityNum: Int = 3
 

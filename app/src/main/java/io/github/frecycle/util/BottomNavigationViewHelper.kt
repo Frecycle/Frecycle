@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import io.github.frecycle.*
@@ -12,7 +13,7 @@ import io.github.frecycle.*
 class BottomNavigationViewHelper {
 
     object Check{
-        fun checkMenuItem(bottomNavigationView : BottomNavigationViewEx, activityNumber : Int){
+        fun checkMenuItem(bottomNavigationView : BottomNavigationView, activityNumber : Int){
             val menu : Menu =  bottomNavigationView.menu
             val menuItem : MenuItem = menu.getItem(activityNumber)
             menuItem.isChecked = true
@@ -22,7 +23,7 @@ class BottomNavigationViewHelper {
     companion object{
         var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-        fun setupBottomNavigationView(applicationContext: Context, activity : Activity, bottomNavigationView : BottomNavigationViewEx){
+        fun setupBottomNavigationView(applicationContext: Context, activity : Activity, bottomNavigationView : BottomNavigationView){
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
 
                 when (item.itemId) {
