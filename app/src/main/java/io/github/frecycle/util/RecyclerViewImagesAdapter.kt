@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -38,12 +39,12 @@ class RecyclerViewImagesAdapter() : RecyclerView.Adapter<RecyclerViewImagesAdapt
     class MyViewHolder : RecyclerView.ViewHolder {
         var productCoverImage : ImageView
         var progressBar : ProgressBar
-
+        var favButton : ImageButton
 
         constructor(itemView: View, listener: OnItemClickListener) : super(itemView){
             productCoverImage = itemView.findViewById(R.id.imageViewProduct)
             this.progressBar = itemView.findViewById(R.id.progressBar4Item)
-
+            this.favButton = itemView.findViewById(R.id.buttonFavorite)
 
             itemView.setOnClickListener(object : View.OnClickListener{
                 override fun onClick(v: View?) {
@@ -56,7 +57,6 @@ class RecyclerViewImagesAdapter() : RecyclerView.Adapter<RecyclerViewImagesAdapt
                 }
             } )
         }
-
 
     }
 

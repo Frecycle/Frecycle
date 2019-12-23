@@ -175,7 +175,7 @@ class AddProductActivity : AppCompatActivity() {
         // products_photos tree
         val productImagesMap : HashMap<String, Any> = HashMap()
 
-        productImagesMap.put(productKey, downloadPhotoURL)
+        productImagesMap[productKey] = downloadPhotoURL
 
         databaseReference.child("products_photos").child(productId).setValue(productImagesMap).addOnCompleteListener { object: OnCompleteListener<Void>{
             override fun onComplete(task: Task<Void>) {

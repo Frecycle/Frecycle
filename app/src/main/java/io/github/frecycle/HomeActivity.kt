@@ -30,6 +30,7 @@ class HomeActivity : AppCompatActivity() {
     private var backPressedTime : Long = 0
     private val activityNum : Int = 0
     private val productsImages : LinkedHashMap<String,String> = LinkedHashMap()
+    private val productsFavs : LinkedHashMap<String,String> = LinkedHashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +81,26 @@ class HomeActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(p0: DatabaseError) {
-                Log.d("HomeActivity", "Products' loads cancelled!")
+                Log.e("HomeActivity", "Products' loads cancelled!")
             }
         })
+
+        /*       val queryFavorites : Query = reference.child("user_favorites")
+
+               queryFavorites.addListenerForSingleValueEvent(object : ValueEventListener{
+                   override fun onDataChange(dataSnapshot: DataSnapshot) {
+                       for (ds: DataSnapshot in dataSnapshot.children) {
+                           if (ds.key.equals(auth.currentUser!!.uid)) {
+                               //TODO FAVORI BUTONLARI GUNCELLENECEK
+                           }
+                       }
+                   }
+                   override fun onCancelled(p0: DatabaseError) {
+                       Log.e("HomeActivity", "UserFavorites' loads cancelled!")
+                   }
+
+               })*/
+
     }
 
     private fun initializeRecyclerViewHome(list: ArrayList<String>) {

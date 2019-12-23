@@ -1,32 +1,50 @@
 package io.github.frecycle
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageButton
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.mikhaellopez.circularimageview.CircularImageView
 import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import io.github.frecycle.models.Product
+import io.github.frecycle.models.User
+import io.github.frecycle.util.FirebaseMethods
 import io.github.frecycle.util.SliderAdapter
+import io.github.frecycle.util.UniversalImageLoader
 import java.lang.NullPointerException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ProductActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
     private lateinit var database : FirebaseDatabase
-    private lateinit var reference: DatabaseReference
+    private lateinit var reference : DatabaseReference
+    private lateinit var methods : FirebaseMethods
 
     private lateinit var profileName : TextView
     private lateinit var productTitle : TextView
     private lateinit var productDescription : TextView
     private lateinit var productDateAndTime : TextView
+    private lateinit var profilePhoto : CircularImageView
     private lateinit var ratingBar: RatingBar
+
+    private lateinit var favButton : ImageButton
+    private var favState : Boolean = false
 
     private lateinit var productId: String
 
@@ -36,27 +54,52 @@ class ProductActivity : AppCompatActivity() {
 
         productId = intent.extras["productId"].toString()
 
-        Toast.makeText(applicationContext, productId, Toast.LENGTH_LONG).show()
-
-        val productImages = ArrayList<String>()
-
-        productImages.add("https://images.unsplash.com/photo-1562887250-1ccd2e28a02c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80")
-        productImages.add("https://images.unsplash.com/photo-1562887194-a50958050e39?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80")
-
-
-        val sliderView: SliderView = findViewById(R.id.imageSlider)
-        val sliderAdapter = SliderAdapter(this, productImages)
-
-        sliderView.sliderAdapter = sliderAdapter
-
-        sliderView.startAutoCycle()
-        sliderView.indicatorSelectedColor = Color.BLACK
-        sliderView.indicatorUnselectedColor = Color.GRAY
-
-        sliderView.setIndicatorAnimation(IndicatorAnimations.WORM)
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
-
         setupFirebaseAuth()
+
+        favButton = findViewById(R.id.productFavButton)
+
+        // key is product id, value is date
+        favButton.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                if(auth.currentUser != null){
+                    if(!favState){
+                        favState = true
+                        val currentDate = SimpleDateFormat("MMM dd, yyyy HH:mm")
+                        val saveCurrentDate = currentDate.format(Calendar.getInstance().time)
+                        favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.favorite))
+                        reference.child("user_favorites").child(auth.currentUser!!.uid).child(productId).setValue(saveCurrentDate).addOnCompleteListener{
+                            OnCompleteListener<Void> { task ->
+                                if(task.isSuccessful){
+                                    Toast.makeText(this@ProductActivity,getString(R.string.productFavorited),Toast.LENGTH_LONG).show()
+                                    Log.d("ProductActivity", "product id is added to 'user_favorites' database")
+                                }else{
+                                    favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.grey))
+                                    Toast.makeText(this@ProductActivity,"Error: " + task.exception.toString(),Toast.LENGTH_LONG).show()
+                                    Log.e("ProductActivity", "Error: product id cannot be added to 'user_favorites' database")
+                                }
+                            }
+                        }
+                    }else{
+                        favState = false
+                        favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.grey))
+                        reference.child("user_favorites").child(auth.currentUser!!.uid).child(productId).removeValue().addOnCompleteListener { task ->
+                            if(task.isSuccessful){
+                                Toast.makeText(this@ProductActivity,getString(R.string.productUnfavorited),Toast.LENGTH_LONG).show()
+                                Log.d("ProductActivity", "product id is removed to 'user_favorites' database")
+                            }else{
+                                favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.favorite))
+                                Toast.makeText(this@ProductActivity,"Error: " + task.exception.toString(),Toast.LENGTH_LONG).show()
+                                Log.e("ProductActivity", "Error: product id cannot be removed to 'user_favorites' database")
+                            }
+                        }
+
+                    }
+                }else{
+                    Toast.makeText(applicationContext, R.string.should_sign_in, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
 
     }
 
@@ -64,10 +107,11 @@ class ProductActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         reference = database.reference
+        methods = FirebaseMethods(this)
 
-        val query : Query = reference.child("products")
+        //val query : Query = reference.child("products")
 
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 initializeProductData(dataSnapshot)
             }
@@ -81,31 +125,68 @@ class ProductActivity : AppCompatActivity() {
     private fun initializeProductData(dataSnapshot: DataSnapshot) {
         val product = Product()
         for (ds : DataSnapshot in dataSnapshot.children){
-            if(ds.key.equals(productId)){
-                try{
-                    product.product_name = ds.getValue(Product::class.java)!!.product_name
-                    product.description = ds.getValue(Product::class.java)!!.description
-                    product.date = ds.getValue(Product::class.java)!!.date
-                    product.time = ds.getValue(Product::class.java)!!.time
-                    product.owner = ds.getValue(Product::class.java)!!.owner
+            if (ds.key.equals("products")){
+                    try{
+                        product.product_name = ds.child(productId).getValue(Product::class.java)!!.product_name
+                        product.description = ds.child(productId).getValue(Product::class.java)!!.description
+                        product.date = ds.child(productId).getValue(Product::class.java)!!.date
+                        product.time = ds.child(productId).getValue(Product::class.java)!!.time
+                        product.owner = ds.child(productId).getValue(Product::class.java)!!.owner
 
-                    productTitle = findViewById(R.id.productName)
-                    productDescription = findViewById(R.id.productDescription)
-                    productDateAndTime = findViewById(R.id.productDateAndTime)
-                    profileName = findViewById(R.id.profileNameText)
-                    ratingBar = findViewById(R.id.ratingBar)
+                        productTitle = findViewById(R.id.productName)
+                        productDescription = findViewById(R.id.productDescription)
+                        productDateAndTime = findViewById(R.id.productDateAndTime)
 
-                    productTitle.text = product.product_name
-                    productDescription.text = product.description
-                    productDateAndTime.text = product.date + " " + product.time
-                    profileName.text = product.owner
-                    ratingBar.rating = 4f
-                }catch (e: NullPointerException){
-                    Log.e("deneme",e.message.toString())
+
+                        productTitle.text = product.product_name
+                        productDescription.text = product.description
+                        productDateAndTime.text = product.date + " " + product.time
+                        //profileName.text = product.owner
+                        //ratingBar.rating = 4f
+                    }catch (e: NullPointerException){
+                        Log.e("deneme",e.message.toString())
+                    }
                 }
+        }
+        for (ds : DataSnapshot in dataSnapshot.children){
+            if (ds.key.equals("users")){
+                profilePhoto = findViewById(R.id.profilePhoto)
+                profileName = findViewById(R.id.profileNameText)
+                ratingBar = findViewById(R.id.ratingBar)
 
+                UniversalImageLoader.setImage(ds.child(product.owner).getValue(User::class.java)!!.profile_photo,profilePhoto,null,"")
+                profileName.text = ds.child(product.owner).getValue(User::class.java)!!.name
+                ratingBar.rating = ds.child(product.owner).getValue(User::class.java)!!.rank
             }
+        }
+        for(ds : DataSnapshot in dataSnapshot.children){
+            if(ds.key.equals("products_photos")){
+                val productImages = ArrayList<String>()
 
+                ds.child(productId).children.forEach { x-> productImages.add(x.value.toString()) }
+
+                val sliderView: SliderView = findViewById(R.id.imageSlider)
+                val sliderAdapter = SliderAdapter(this, productImages)
+                sliderView.sliderAdapter = sliderAdapter
+
+                sliderView.startAutoCycle()
+                sliderView.indicatorSelectedColor = Color.BLACK
+                sliderView.indicatorUnselectedColor = Color.GRAY
+
+                sliderView.setIndicatorAnimation(IndicatorAnimations.WORM)
+                sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+            }
+        }
+        for(ds : DataSnapshot in dataSnapshot.children){
+            if(auth.currentUser == null) break;
+            if(ds.key.equals("user_favorites")){
+                ds.child(auth.currentUser!!.uid).children.forEach {x->
+                    if(x.key.equals(productId)){
+                        favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.favorite))
+                        favState = true
+                    }
+                }
+            }
         }
 
     }

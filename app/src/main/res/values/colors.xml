@@ -10,6 +10,7 @@
     <color name="colorTextView">#83898E</color>
     <color name="cardViewBackground">#585858</color>
     <color name="rating">#FFEB3B</color>
+    <color name="favorite">#FF5252</color>
     <color name="black">#000000</color>
     <color name="passiveBlack">#99000000</color>
     <color name="white">#FFFFFF</color>

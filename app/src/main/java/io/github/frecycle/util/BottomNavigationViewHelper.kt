@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import io.github.frecycle.*
 
 class BottomNavigationViewHelper {
@@ -44,18 +43,25 @@ class BottomNavigationViewHelper {
                     }
 
                     R.id.navigation_favorites -> {
-                        if(activity !is FavoritesActivity){
-                            val intent = Intent(applicationContext, FavoritesActivity::class.java)
-                            applicationContext.startActivity(intent)
-                            activity.overridePendingTransition(0,0)
+                        if(activity !is AccountActivity || activity !is FavoritesActivity ){
+                            if(auth.currentUser == null){
+                                val intent = Intent(applicationContext, AccountActivity::class.java)
+                                intent.putExtra("activityNum","2")
+                                applicationContext.startActivity(intent)
+                                activity.overridePendingTransition(0,0)
+                            }else{
+                                val intent = Intent(applicationContext, FavoritesActivity::class.java)
+                                applicationContext.startActivity(intent)
+                                activity.overridePendingTransition(0,0)
+                            }
                         }
                     }
 
                     R.id.navigation_myAccount -> {
                         if(activity !is AccountActivity || activity !is ProfileActivity){
-                            //TODO register olduktan sonra currentuser null olmuyor ve profile'e gidiyor
                             if(auth.currentUser == null){
                                 val intent = Intent(applicationContext, AccountActivity::class.java)
+                                intent.putExtra("activityNum","3")
                                 applicationContext.startActivity(intent)
                                 activity.overridePendingTransition(0,0)
                             }else{
