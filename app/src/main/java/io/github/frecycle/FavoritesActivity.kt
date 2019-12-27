@@ -4,35 +4,38 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
+import android.view.View
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import io.github.frecycle.models.Product
 import io.github.frecycle.util.BottomNavigationViewHelper
-import io.github.frecycle.util.RecyclerViewAdapter
+import io.github.frecycle.util.OnItemClickListener
+import io.github.frecycle.util.RecyclerViewFavoritesAdapter
 
 class FavoritesActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
     private lateinit var database : FirebaseDatabase
     private lateinit var reference: DatabaseReference
 
-    private lateinit var productName : TextView
-    private lateinit var productCity : TextView
-    private lateinit var productDate : TextView
-
-    private val productList = ArrayList<Product>()
-    private val productPhotoList = ArrayList<String>()
+    private lateinit var productList: ArrayList<Product>
+    private lateinit var productPhotoList: ArrayList<String>
+    private lateinit var favList : ArrayList<String>
     private lateinit var bottomNavigation : BottomNavigationView
     private val activityNum : Int = 2
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorites)
 
         setupFirebaseAuth()
+        getFavoriteProducts()
+        initSwipeRefreshLayout()
 
         bottomNavigation = findViewById(R.id.bottom_nav)
 
@@ -45,9 +48,16 @@ class FavoritesActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
         reference = database.reference
 
-        val favList = ArrayList<String>()
 
-        reference.addValueEventListener(object : ValueEventListener {
+    }
+
+    private fun getFavoriteProducts(){
+        this.productList = ArrayList()
+        this.productPhotoList = ArrayList()
+        this.favList = ArrayList()
+
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (ds: DataSnapshot in dataSnapshot.children) {
                     if (ds.key.equals("user_favorites")) {
@@ -72,7 +82,6 @@ class FavoritesActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                            Log.e("deneme", productPhotoList.toString())
 
                         }catch ( e: NullPointerException){
                             Log.d("FavoritesActivity: ", e.message)
@@ -84,7 +93,6 @@ class FavoritesActivity : AppCompatActivity() {
                         if(favList.size>0){
                             for((index) in favList.withIndex()){
                                 val product = Product()
-
                                 product.product_name = ds.child(favList[index]).getValue(Product::class.java)!!.product_name
                                 product.city = ds.child(favList[index]).getValue(Product::class.java)!!.city
                                 product.date = ds.child(favList[index]).getValue(Product::class.java)!!.date
@@ -96,21 +104,42 @@ class FavoritesActivity : AppCompatActivity() {
                     }
                 }
 
-                initializeRecyclerView(productList, productPhotoList)
+                initializeRecyclerViewFavorites(productList, productPhotoList)
 
             }
             override fun onCancelled(p0: DatabaseError) {
                 Log.e("FavoritesActivity", "UserFavorites' loads cancelled!")
             }
-
         })
     }
 
-    private fun initializeRecyclerView(products: ArrayList<Product>, productPhotos : ArrayList<String>){
+    private fun initializeRecyclerViewFavorites(products: ArrayList<Product>, productPhotos : ArrayList<String>){
         val recyclerView : RecyclerView = findViewById(R.id.recycleViewFavorites)
-        val recyclerViewAdapter = RecyclerViewAdapter(this,products,productPhotos)
+        val recyclerViewFavoritesAdapter = RecyclerViewFavoritesAdapter(this,products,productPhotos)
         recyclerView.layoutManager = GridLayoutManager(this,1)
-        recyclerView.adapter = recyclerViewAdapter
+        recyclerView.adapter = recyclerViewFavoritesAdapter
+
+        recyclerViewFavoritesAdapter.setOnItemClickListener(object: OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                val intent = Intent(applicationContext, ProductActivity::class.java)
+                intent.putExtra("productId", favList[position])
+                startActivity(intent)
+            }
+        })
+
+        val progressBar : ProgressBar = findViewById(R.id.favProgressBar)
+        progressBar.visibility = View.GONE
+
+    }
+
+    private fun initSwipeRefreshLayout(){
+        val swipeRefreshLayout : SwipeRefreshLayout = findViewById(R.id.swipeRefreshFavorites)
+
+        swipeRefreshLayout.setOnRefreshListener {
+            getFavoriteProducts()
+
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     override fun onPause() {

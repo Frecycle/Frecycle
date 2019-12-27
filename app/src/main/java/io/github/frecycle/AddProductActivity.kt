@@ -151,14 +151,15 @@ class AddProductActivity : AppCompatActivity() {
         val productMap : HashMap<String, Any> = HashMap()
         val productId : String = databaseReference.push().key!!
 
-        productMap.put("category", productCategory.selectedItem.toString())
-        productMap.put("city", productCity.selectedItem.toString())
-        productMap.put("date", saveCurrentDate)
-        productMap.put("time", saveCurrentTime)
-        productMap.put("product_name", productTitle.text.toString())
-        productMap.put("description",productDescription.text.toString())
-        productMap.put("product_id", productId)
-        productMap.put("owner", auth.currentUser!!.uid)
+        productMap["category"] = productCategory.selectedItem.toString()
+        productMap["city"] = productCity.selectedItem.toString()
+        productMap["date"] = saveCurrentDate
+        productMap["time"] = saveCurrentTime
+        productMap["product_name"] = productTitle.text.toString()
+        productMap["description"] = productDescription.text.toString()
+        productMap["product_id"] = productId
+        productMap["owner"] = auth.currentUser!!.uid
+        productMap["state"] = 0
 
         // products tree
         databaseReference.child("products").child(productId).setValue(productMap).addOnCompleteListener { object: OnCompleteListener<Void>{

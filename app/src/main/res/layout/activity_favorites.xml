@@ -20,16 +20,24 @@ tools:context=".FavoritesActivity">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginBottom="55dp">
+        android:layout_marginBottom="60dp">
 
         <include layout="@layout/snippet_favorites_toolbar"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleViewFavorites"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshFavorites"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleViewFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
 
     </LinearLayout>
 

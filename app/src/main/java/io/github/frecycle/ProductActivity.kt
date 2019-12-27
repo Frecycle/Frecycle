@@ -11,8 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.mikhaellopez.circularimageview.CircularImageView
@@ -21,12 +19,11 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import io.github.frecycle.models.Product
 import io.github.frecycle.models.User
+import io.github.frecycle.util.FavoritesHelper
 import io.github.frecycle.util.FirebaseMethods
 import io.github.frecycle.util.SliderAdapter
 import io.github.frecycle.util.UniversalImageLoader
 import java.lang.NullPointerException
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -64,35 +61,10 @@ class ProductActivity : AppCompatActivity() {
                 if(auth.currentUser != null){
                     if(!favState){
                         favState = true
-                        val currentDate = SimpleDateFormat("MMM dd, yyyy HH:mm")
-                        val saveCurrentDate = currentDate.format(Calendar.getInstance().time)
-                        favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.favorite))
-                        reference.child("user_favorites").child(auth.currentUser!!.uid).child(productId).setValue(saveCurrentDate).addOnCompleteListener{
-                            OnCompleteListener<Void> { task ->
-                                if(task.isSuccessful){
-                                    Toast.makeText(this@ProductActivity,getString(R.string.productFavorited),Toast.LENGTH_LONG).show()
-                                    Log.d("ProductActivity", "product id is added to 'user_favorites' database")
-                                }else{
-                                    favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.grey))
-                                    Toast.makeText(this@ProductActivity,"Error: " + task.exception.toString(),Toast.LENGTH_LONG).show()
-                                    Log.e("ProductActivity", "Error: product id cannot be added to 'user_favorites' database")
-                                }
-                            }
-                        }
+                        FavoritesHelper.instance.addToFavorites(applicationContext,favButton,productId)
                     }else{
                         favState = false
-                        favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.grey))
-                        reference.child("user_favorites").child(auth.currentUser!!.uid).child(productId).removeValue().addOnCompleteListener { task ->
-                            if(task.isSuccessful){
-                                Toast.makeText(this@ProductActivity,getString(R.string.productUnfavorited),Toast.LENGTH_LONG).show()
-                                Log.d("ProductActivity", "product id is removed to 'user_favorites' database")
-                            }else{
-                                favButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(applicationContext, R.color.favorite))
-                                Toast.makeText(this@ProductActivity,"Error: " + task.exception.toString(),Toast.LENGTH_LONG).show()
-                                Log.e("ProductActivity", "Error: product id cannot be removed to 'user_favorites' database")
-                            }
-                        }
-
+                        FavoritesHelper.instance.removeFromFavorites(applicationContext,favButton,productId)
                     }
                 }else{
                     Toast.makeText(applicationContext, R.string.should_sign_in, Toast.LENGTH_SHORT).show()
@@ -178,7 +150,7 @@ class ProductActivity : AppCompatActivity() {
             }
         }
         for(ds : DataSnapshot in dataSnapshot.children){
-            if(auth.currentUser == null) break;
+            if(auth.currentUser == null) break
             if(ds.key.equals("user_favorites")){
                 ds.child(auth.currentUser!!.uid).children.forEach {x->
                     if(x.key.equals(productId)){

@@ -9,13 +9,10 @@ class Product {
     lateinit var date : String
     lateinit var time: String
     lateinit var owner: String
+    var state: Int = 0
+    // ON OFFER = 0, RECYCLED = 100,
 
-
-
-
-    constructor(){
-    }
-
+    constructor()
     constructor(
         product_id: String,
         category: String,
@@ -24,7 +21,8 @@ class Product {
         city: String,
         date: String,
         time: String,
-        owner: String
+        owner: String,
+        state: Int
     ) {
         this.product_id = product_id
         this.category = category
@@ -34,6 +32,7 @@ class Product {
         this.date = date
         this.time = time
         this.owner = owner
+        this.state = state
     }
 
 
