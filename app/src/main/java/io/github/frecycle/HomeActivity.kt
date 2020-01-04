@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.nostra13.universalimageloader.core.ImageLoader
 import io.github.frecycle.util.*
+import java.lang.Exception
 import kotlin.system.exitProcess
 
 class HomeActivity : AppCompatActivity() {
@@ -117,9 +118,9 @@ class HomeActivity : AppCompatActivity() {
 
         recyclerViewImagesAdapter.setOnItemClickListener(object: OnItemClickListener{
             override fun onItemClick(position: Int) {
-                val intent = Intent(applicationContext, ProductActivity::class.java)
-                intent.putExtra("productId", productsImages.keys.toTypedArray()[position])
-                startActivity(intent)
+                    val intent = Intent(applicationContext, ProductActivity::class.java)
+                    intent.putExtra("productId", productsImages.keys.toTypedArray()[position])
+                    startActivity(intent)
             }
         })
         val progressBar : ProgressBar = findViewById(R.id.homeProgressBar)

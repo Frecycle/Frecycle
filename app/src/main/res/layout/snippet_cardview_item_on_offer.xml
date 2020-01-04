@@ -5,12 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardViewItemOnOffer"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="160dp"
     app:cardCornerRadius="5dp"
     android:layout_margin="5dp">
 
     <ProgressBar
-        android:id="@+id/progressBar4Item"
+        android:id="@+id/progressBar4OnOfferItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -18,34 +18,12 @@
         style="?android:attr/progressBarStyle"
         android:theme="@style/ProgressBarStyle"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <ImageView
-            android:id="@+id/imageViewProduct"
+            android:id="@+id/imageViewProductOnOffer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:background="#50000000"/>
-
-
-        <ImageButton
-            android:id="@+id/productFavButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@android:color/transparent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="invisible"
-            app:srcCompat="@drawable/ic_favorite_light" />
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.cardview.widget.CardView>
 

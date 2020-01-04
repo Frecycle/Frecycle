@@ -1,14 +1,15 @@
 package io.github.frecycle
 
+import android.app.ProgressDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +24,7 @@ import io.github.frecycle.util.FavoritesHelper
 import io.github.frecycle.util.FirebaseMethods
 import io.github.frecycle.util.SliderAdapter
 import io.github.frecycle.util.UniversalImageLoader
+import java.lang.Exception
 import java.lang.NullPointerException
 import kotlin.collections.ArrayList
 
@@ -39,22 +41,26 @@ class ProductActivity : AppCompatActivity() {
     private lateinit var productDateAndTime : TextView
     private lateinit var profilePhoto : CircularImageView
     private lateinit var ratingBar: RatingBar
-
+    private lateinit var sendRequestButton: Button
     private lateinit var favButton : ImageButton
-    private var favState : Boolean = false
+    private lateinit var productDeleteButton : ImageButton
 
+    private var favState : Boolean = false
     private lateinit var productId: String
+    private lateinit var product: Product
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
+        initWidgets()
 
         productId = intent.extras["productId"].toString()
-
         setupFirebaseAuth()
+        setupButtons()
 
-        favButton = findViewById(R.id.productFavButton)
+    }
 
+    private fun setupButtons() {
         // key is product id, value is date
         favButton.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
@@ -70,9 +76,103 @@ class ProductActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, R.string.should_sign_in, Toast.LENGTH_SHORT).show()
                 }
             }
-
         })
 
+        sendRequestButton.setOnClickListener(object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                if (auth.currentUser != null && auth.currentUser!!.uid == product.owner){
+                    Toast.makeText(this@ProductActivity,getString(R.string.owner_cannot_send_request),Toast.LENGTH_SHORT).show()
+                }else if(auth.currentUser == null){
+                    Toast.makeText(this@ProductActivity,getString(R.string.should_login_to_continue),Toast.LENGTH_SHORT).show()
+                    val intent =  Intent(this@ProductActivity, SignInUpActivity::class.java)
+                    startActivity(intent)
+                }else{
+                    // TODO redirect to message page
+                    Toast.makeText(this@ProductActivity,"Messages page hasn't been coded yet :(",Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+        productDeleteButton.setOnClickListener(object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this@ProductActivity)
+                alertDialogBuilder.setMessage(getString(R.string.sure_delete_product))
+                alertDialogBuilder.setPositiveButton("Yes", object: DialogInterface.OnClickListener{
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        val progressDialog: ProgressDialog = ProgressDialog(this@ProductActivity)
+                        progressDialog.setTitle("Be patient!")
+                        progressDialog.setMessage("We are deleting your product :)")
+                        progressDialog.setCanceledOnTouchOutside(false)
+                        progressDialog.show()
+
+                        reference.addValueEventListener(object: ValueEventListener{
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                for (ds : DataSnapshot in dataSnapshot.children){
+                                    try {
+                                        if (ds.key.equals("products")){
+                                            Log.d("silme işlemi1-> ", ds.child(productId).toString())
+                                            ds.child(productId).ref.removeValue()
+                                        }else if(ds.key.equals("products_photos")){
+                                            Log.d("silme işlemi2-> ", ds.child(productId).toString())
+                                            ds.child(productId).ref.removeValue()
+                                        }else if(ds.key.equals("user_products")){
+                                            ds.child(auth.currentUser!!.uid).children.forEach userProduct@{ keyNProductId->
+                                                if (keyNProductId.value!!.equals(productId)){
+                                                    Log.d("silme işlemi3-> ", keyNProductId.toString())
+                                                    keyNProductId.ref.removeValue()
+                                                    return@userProduct
+                                                }
+                                            }
+                                        }else if(ds.key.equals("user_favorites")){
+                                            for (snapShot : DataSnapshot in ds.children){
+                                                snapShot.children.forEach { productNDate ->
+                                                    if(productNDate.key == productId){
+                                                        Log.d("silme işlemi4-> ", productNDate.toString())
+                                                        productNDate.ref.removeValue()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }catch (e: Exception){
+                                        Log.e("ItemDeletion@ProductAct", e.message)
+                                        progressDialog.dismiss()
+                                        Toast.makeText(this@ProductActivity, e.message, Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            }
+                            override fun onCancelled(e: DatabaseError) {
+                                Log.e("ItemDeletion@ProductAct", e.message)
+                                progressDialog.dismiss()
+                            }
+                        })
+                        //firestore'den silme işlemi yapmadık
+                        progressDialog.dismiss()
+                        finish()
+                    }
+                })
+                alertDialogBuilder.setNegativeButton("No", object: DialogInterface.OnClickListener{
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        dialog!!.cancel()
+                    }
+                })
+
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+            }
+        })
+
+    }
+
+    private fun initWidgets() {
+        profilePhoto = findViewById(R.id.profilePhoto)
+        profileName = findViewById(R.id.profileNameText)
+        ratingBar = findViewById(R.id.ratingBar)
+        productTitle = findViewById(R.id.productName)
+        productDescription = findViewById(R.id.productDescription)
+        productDateAndTime = findViewById(R.id.productDateAndTime)
+        favButton = findViewById(R.id.productFavButton)
+        sendRequestButton = findViewById(R.id.productSendRequestButton)
+        productDeleteButton = findViewById(R.id.productDeleteButton)
     }
 
     private fun setupFirebaseAuth(){
@@ -81,22 +181,20 @@ class ProductActivity : AppCompatActivity() {
         reference = database.reference
         methods = FirebaseMethods(this)
 
-        //val query : Query = reference.child("products")
-
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                initializeProductData(dataSnapshot)
+                initProductData(dataSnapshot)
             }
 
             override fun onCancelled(p0: DatabaseError) {
-                Log.e("ProductActivity", "Products' loads cancelled!")
+                Log.e("ProductActivity", "Product's loads cancelled!")
             }
         })
     }
 
-    private fun initializeProductData(dataSnapshot: DataSnapshot) {
-        val product = Product()
-        for (ds : DataSnapshot in dataSnapshot.children){
+    private fun initProductData(dataSnapshot: DataSnapshot){
+        product = Product()
+        for (ds : DataSnapshot in dataSnapshot.children) {
             if (ds.key.equals("products")){
                     try{
                         product.product_name = ds.child(productId).getValue(Product::class.java)!!.product_name
@@ -105,27 +203,25 @@ class ProductActivity : AppCompatActivity() {
                         product.time = ds.child(productId).getValue(Product::class.java)!!.time
                         product.owner = ds.child(productId).getValue(Product::class.java)!!.owner
 
-                        productTitle = findViewById(R.id.productName)
-                        productDescription = findViewById(R.id.productDescription)
-                        productDateAndTime = findViewById(R.id.productDateAndTime)
-
-
                         productTitle.text = product.product_name
                         productDescription.text = product.description
                         productDateAndTime.text = product.date + " " + product.time
-                        //profileName.text = product.owner
-                        //ratingBar.rating = 4f
-                    }catch (e: NullPointerException){
-                        Log.e("deneme",e.message.toString())
+
+                        if (auth.currentUser != null && auth.currentUser!!.uid == product.owner){
+                            sendRequestButton.setBackgroundResource(R.drawable.button_background_color_disabled)
+                            productDeleteButton.visibility = View.VISIBLE
+                        }
+
+                    }catch (e: Exception){
+                        Log.e("initProductData", e.message.toString())
+                        Toast.makeText(applicationContext, getString(R.string.product_not_reachable), Toast.LENGTH_LONG).show()
+                        this@ProductActivity.finish()
+                        return
                     }
                 }
         }
         for (ds : DataSnapshot in dataSnapshot.children){
             if (ds.key.equals("users")){
-                profilePhoto = findViewById(R.id.profilePhoto)
-                profileName = findViewById(R.id.profileNameText)
-                ratingBar = findViewById(R.id.ratingBar)
-
                 UniversalImageLoader.setImage(ds.child(product.owner).getValue(User::class.java)!!.profile_photo,profilePhoto,null,"")
                 profileName.text = ds.child(product.owner).getValue(User::class.java)!!.name
                 ratingBar.rating = ds.child(product.owner).getValue(User::class.java)!!.rank
@@ -160,7 +256,6 @@ class ProductActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
 }

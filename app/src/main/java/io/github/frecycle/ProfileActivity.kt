@@ -2,6 +2,7 @@ package io.github.frecycle
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.database.*
 import com.mikhaellopez.circularimageview.CircularImageView
+import io.github.frecycle.models.Product
 import io.github.frecycle.models.User
 import io.github.frecycle.util.BottomNavigationViewHelper
 import io.github.frecycle.util.FirebaseMethods
@@ -32,6 +34,9 @@ class ProfileActivity : AppCompatActivity() {
 
     private val activityNum: Int = 3
 
+    private lateinit var onOfferFragment: OnOfferFragment
+    private lateinit var recycledFragment: RecycledFragment
+
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     private lateinit var selectionsPagerAdapter: SelectionsPagerAdapter
@@ -41,29 +46,93 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        selectionsPagerAdapter =
-            SelectionsPagerAdapter(supportFragmentManager)
+        selectionsPagerAdapter = SelectionsPagerAdapter(supportFragmentManager)
 
         viewPager = findViewById(R.id.viewPager)
 
-        selectionsPagerAdapter.addFragment(OnOfferFragment(), "ON OFFER")
-        selectionsPagerAdapter.addFragment(RecycledFragment(), "RECYCLED")
-        selectionsPagerAdapter.addFragment(CommentsFragment(), "COMMENTS")
+        onOfferFragment = OnOfferFragment()
+        recycledFragment = RecycledFragment()
+
+        selectionsPagerAdapter.addFragment(onOfferFragment, "ON OFFER")
+        selectionsPagerAdapter.addFragment(recycledFragment, "RECYCLED")
+        //selectionsPagerAdapter.addFragment(CommentsFragment(), "COMMENTS")
 
         viewPager.adapter = selectionsPagerAdapter
-
 
         tabLayout = findViewById(R.id.tabLayout)
         tabLayout.setupWithViewPager(viewPager)
 
-
         setupTopToolBar()
         setupFirebaseAuth()
+        loadProducts()
 
         bottomNavigation = findViewById(R.id.bottom_nav)
 
         // BottomNavigationView activity changer
         BottomNavigationViewHelper.setupBottomNavigationView(applicationContext,this, bottomNavigation)
+    }
+
+    private fun loadProducts() {
+        val productsOnOffer = ArrayList<String>()
+        val productsRecycled = ArrayList<String>()
+        val productOnOfferImages : LinkedHashMap<String,String> = LinkedHashMap()
+        val productRecycledImages : LinkedHashMap<String,String> = LinkedHashMap()
+        reference.addListenerForSingleValueEvent(object : ValueEventListener{
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val productsOfUser : ArrayList<String> = ArrayList()
+                // get current user's products
+                for (ds: DataSnapshot in dataSnapshot.children) {
+                    if (ds.key.equals("user_products")) {
+                        try {
+                            ds.child(auth.currentUser!!.uid).children.forEach { product->
+                                productsOfUser.add(product.value.toString())
+                            }
+                        }catch ( e: NullPointerException){
+                            Log.e("loadProducts: ", e.message)
+                        }
+                    }
+                }
+                // get products' state feature
+                for (ds: DataSnapshot in dataSnapshot.children) {
+                    if (ds.key.equals("products")) {
+                        for (productId: String in productsOfUser){
+                            try {
+                                val state = ds.child(productId).getValue(Product::class.java)?.state
+                                if(state == 0){
+                                    productsOnOffer.add(productId)
+                                }else if(state == 100){
+                                    productsRecycled.add(productId)
+                                }else{
+                                    Log.e("loadProducts: ", "There is a product that has an unknown state!!!")
+                                }
+                            }catch (e: NullPointerException){
+                                Log.e("loadProducts: ", e.message)
+                            }
+                        }
+                    }
+                }
+
+                // get products' photos
+                for (ds: DataSnapshot in dataSnapshot.children) {
+                    if (ds.key.equals("products_photos")) {
+                        for (productId: String in productsOnOffer){
+                            productOnOfferImages[productId] = ds.child(productId).children.first().value.toString()
+                        }
+                        for (productId: String in productsRecycled){
+                            productRecycledImages[productId] = ds.child(productId).children.first().value.toString()
+                        }
+                    }
+                }
+
+                onOfferFragment.initRecyclerView(onOfferFragment.view!!,productOnOfferImages)
+                recycledFragment.initRecyclerView(recycledFragment.view!!, productRecycledImages)
+
+            }
+            override fun onCancelled(e: DatabaseError) {
+                Log.e("loadProducts: ", e.message)
+            }
+        })
     }
 
     private fun setupFirebaseAuth(){
@@ -77,8 +146,8 @@ class ProfileActivity : AppCompatActivity() {
                 initializeUserProfile(methods.getUserData(dataSnapshot))
             }
 
-            override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onCancelled(e: DatabaseError) {
+                Log.e("setupFirebaseAuth", e.message)
             }
         })
     }

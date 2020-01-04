@@ -2,6 +2,7 @@ package io.github.frecycle
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.mikhaellopez.circularimageview.CircularImageView
 import io.github.frecycle.models.User
 import io.github.frecycle.util.FirebaseMethods
 import io.github.frecycle.util.UniversalImageLoader
+import java.lang.NullPointerException
 
 class EditProfileFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
@@ -71,16 +73,19 @@ class EditProfileFragment : Fragment() {
 
     // sets widgets with data coming from database
     private fun initializeUserData(user : User){
-        val photoView : CircularImageView = view!!.findViewById(R.id.profilePhoto)
-        UniversalImageLoader.setImage(user.profile_photo,photoView,null,"")
+        try {
+            val photoView : CircularImageView = view!!.findViewById(R.id.profilePhoto)
+            UniversalImageLoader.setImage(user.profile_photo,photoView,null,"")
 
-        this.user = user
+            this.user = user
 
-        tvDisplayName.text = user.name
-        tvEditEmail.text = user.email
-        spEditCity.setSelection(resources.getStringArray(R.array.city_array).indexOf(user.city))
-        tvEditPhone.text = user.phone.toString()
-
+            tvDisplayName.text = user.name
+            tvEditEmail.text = user.email
+            spEditCity.setSelection(resources.getStringArray(R.array.city_array).indexOf(user.city))
+            tvEditPhone.text = user.phone.toString()
+        }catch (e: NullPointerException){
+            Log.e("EditProfileFragment", e.message)
+        }
     }
 
     private fun saveProfileSettings(){

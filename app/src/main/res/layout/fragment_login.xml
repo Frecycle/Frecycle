@@ -63,6 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
+                    android:text="lauren@cohan.com"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"/>
 
@@ -79,6 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
+                    android:text="123456"
                     android:inputType="textPassword"
                     android:maxLines="1"/>
 

@@ -24,6 +24,8 @@ tools:context=".FavoritesActivity">
 
         <include layout="@layout/snippet_favorites_toolbar"/>
 
+
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshFavorites"
             android:layout_width="match_parent"
@@ -33,6 +35,7 @@ tools:context=".FavoritesActivity">
                 android:id="@+id/recycleViewFavorites"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
