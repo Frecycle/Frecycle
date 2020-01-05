@@ -25,7 +25,7 @@ import kotlin.collections.HashMap
 
 class AddProductActivity : AppCompatActivity() {
     private val GALLERY_PICK = 1
-    private lateinit var imageUri : Uri
+    private var imageUri : Uri? = null
     private lateinit var uploadPhoto : ImageView
     private lateinit var productTitle : EditText
     private lateinit var productDescription : EditText
@@ -123,9 +123,9 @@ class AddProductActivity : AppCompatActivity() {
         //actually photo name
         productKey = saveCurrentDate + saveCurrentTime
 
-        val filePath = storageReference.child("products_photos").child(imageUri.lastPathSegment + productKey + ".jpg")
+        val filePath = storageReference.child("products_photos").child(imageUri!!.lastPathSegment + productKey + ".jpg")
 
-        val uploadTask = filePath.putFile(imageUri).continueWithTask(object: Continuation<UploadTask.TaskSnapshot, Task<Uri>> {
+        val uploadTask = filePath.putFile(imageUri!!).continueWithTask(object: Continuation<UploadTask.TaskSnapshot, Task<Uri>> {
                     override fun then(task: Task<UploadTask.TaskSnapshot>): Task<Uri> {
                         if (!task.isSuccessful){
                             throw task.exception!!

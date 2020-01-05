@@ -3,20 +3,18 @@ package io.github.frecycle
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.database.*
 import com.mikhaellopez.circularimageview.CircularImageView
+import com.nex3z.notificationbadge.NotificationBadge
 import io.github.frecycle.models.Product
 import io.github.frecycle.models.User
 import io.github.frecycle.util.BottomNavigationViewHelper
@@ -27,12 +25,12 @@ import io.github.frecycle.util.UniversalImageLoader
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
-    private lateinit var authListener: AuthStateListener
     private lateinit var database : FirebaseDatabase
     private lateinit var reference: DatabaseReference
     private lateinit var methods: FirebaseMethods
 
     private val activityNum: Int = 3
+    private var REQUEST_COUNT: Int = 0
 
     private lateinit var onOfferFragment: OnOfferFragment
     private lateinit var recycledFragment: RecycledFragment
@@ -41,6 +39,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
     private lateinit var selectionsPagerAdapter: SelectionsPagerAdapter
     private lateinit var bottomNavigation : BottomNavigationView
+    private var badge : NotificationBadge? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +69,36 @@ class ProfileActivity : AppCompatActivity() {
 
         // BottomNavigationView activity changer
         BottomNavigationViewHelper.setupBottomNavigationView(applicationContext,this, bottomNavigation)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.notifications_menu, menu)
+        val view = menu!!.findItem(R.id.notification_menu_item).actionView
+
+        view.setOnClickListener(object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                val intent = Intent(this@ProfileActivity, MessageActivity::class.java)
+                startActivity(intent)
+            }
+        })
+        badge = view.findViewById(R.id.notification_badge)
+        updateCartCount()
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun updateCartCount() {
+
+        if (badge ==  null) return
+        runOnUiThread(object: Runnable{
+            override fun run() {
+                if(REQUEST_COUNT == 0){
+                    badge!!.visibility = View.INVISIBLE
+                }else{
+                    badge!!.visibility = View.VISIBLE
+                    badge!!.setText(REQUEST_COUNT.toString())
+                }
+            }
+        })
     }
 
     private fun loadProducts() {
@@ -144,6 +173,16 @@ class ProfileActivity : AppCompatActivity() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 initializeUserProfile(methods.getUserData(dataSnapshot))
+
+                for(ds: DataSnapshot in dataSnapshot.children){
+                    if(ds.key.equals("products_requests")){
+                        ds.child(auth.currentUser!!.uid).children.forEach { allProducts ->
+                            REQUEST_COUNT += allProducts.children.count()
+                        }
+                    }
+                }
+
+
             }
 
             override fun onCancelled(e: DatabaseError) {

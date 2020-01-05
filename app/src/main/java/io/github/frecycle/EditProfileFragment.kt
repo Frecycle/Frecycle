@@ -60,7 +60,7 @@ class EditProfileFragment : Fragment() {
         methods = FirebaseMethods(activity!!)
         userId = auth.currentUser!!.uid
 
-        reference.addValueEventListener(object : ValueEventListener {
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 initializeUserData(methods.getUserData(dataSnapshot))
             }
@@ -84,7 +84,7 @@ class EditProfileFragment : Fragment() {
             spEditCity.setSelection(resources.getStringArray(R.array.city_array).indexOf(user.city))
             tvEditPhone.text = user.phone.toString()
         }catch (e: NullPointerException){
-            Log.e("EditProfileFragment", e.message)
+            Log.e("EditProfileFragment", "NullpointerException :(")
         }
     }
 

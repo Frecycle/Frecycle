@@ -46,6 +46,7 @@ class ProductActivity : AppCompatActivity() {
     private lateinit var productDeleteButton : ImageButton
 
     private var favState : Boolean = false
+    private var REQUEST_STATUS: Int  = -1
     private lateinit var productId: String
     private lateinit var product: Product
 
@@ -88,7 +89,17 @@ class ProductActivity : AppCompatActivity() {
                     startActivity(intent)
                 }else{
                     // TODO redirect to message page
-                    Toast.makeText(this@ProductActivity,"Messages page hasn't been coded yet :(",Toast.LENGTH_SHORT).show()
+                    if(REQUEST_STATUS == -1 && product.state == 0){
+                        sendRequest()
+                        sendRequestButton.setBackgroundResource(R.drawable.button_background_color_disabled)
+                        sendRequestButton.text = "Waiting Response"
+                        Toast.makeText(this@ProductActivity,"Request sent!",Toast.LENGTH_SHORT).show()
+                    }else if (REQUEST_STATUS == 0 && product.state == 0){
+                        Toast.makeText(this@ProductActivity,getString(R.string.waiting_response),Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        Toast.makeText(this@ProductActivity,getString(R.string.product_not_reachable),Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         })
@@ -163,6 +174,24 @@ class ProductActivity : AppCompatActivity() {
 
     }
 
+    private fun sendRequest(){
+        reference.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for( ds: DataSnapshot in dataSnapshot.children) {
+                    if(ds.key.equals("products_requests")){
+                     val snapshot = ds.child(product.owner).child(productId).child(auth.currentUser!!.uid).ref
+                        snapshot.setValue(0)
+                        REQUEST_STATUS = 0
+                        // 0: PENDING, 100: YES, 200: NO
+                    }
+                }
+            }
+            override fun onCancelled(e: DatabaseError) {
+                Log.e("SendRequest:Product", e.message)
+            }
+        })
+    }
+
     private fun initWidgets() {
         profilePhoto = findViewById(R.id.profilePhoto)
         profileName = findViewById(R.id.profileNameText)
@@ -202,15 +231,13 @@ class ProductActivity : AppCompatActivity() {
                         product.date = ds.child(productId).getValue(Product::class.java)!!.date
                         product.time = ds.child(productId).getValue(Product::class.java)!!.time
                         product.owner = ds.child(productId).getValue(Product::class.java)!!.owner
+                        product.state = ds.child(productId).getValue(Product::class.java)!!.state
 
                         productTitle.text = product.product_name
                         productDescription.text = product.description
                         productDateAndTime.text = product.date + " " + product.time
 
-                        if (auth.currentUser != null && auth.currentUser!!.uid == product.owner){
-                            sendRequestButton.setBackgroundResource(R.drawable.button_background_color_disabled)
-                            productDeleteButton.visibility = View.VISIBLE
-                        }
+
 
                     }catch (e: Exception){
                         Log.e("initProductData", e.message.toString())
@@ -218,7 +245,7 @@ class ProductActivity : AppCompatActivity() {
                         this@ProductActivity.finish()
                         return
                     }
-                }
+            }
         }
         for (ds : DataSnapshot in dataSnapshot.children){
             if (ds.key.equals("users")){
@@ -255,6 +282,30 @@ class ProductActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+        for(ds : DataSnapshot in dataSnapshot.children) {
+            if (ds.key.equals("products_requests")) {
+                ds.child(product.owner).child(productId).children.forEach { userNAnswers ->
+                    if(userNAnswers.key.equals(auth.currentUser!!.uid)){
+                        REQUEST_STATUS = userNAnswers.value.toString().toInt()
+                    }
+                }
+            }
+        }
+
+        initAppearanceRequestButton()
+    }
+
+    fun initAppearanceRequestButton(){
+        if (auth.currentUser != null && auth.currentUser!!.uid == product.owner){
+            sendRequestButton.setBackgroundResource(R.drawable.button_background_color_disabled)
+            productDeleteButton.visibility = View.VISIBLE
+        }else if(auth.currentUser != null && product.state == 0 && REQUEST_STATUS == 0){
+            sendRequestButton.setBackgroundResource(R.drawable.button_background_color_disabled)
+            sendRequestButton.text = "Waiting Response"
+        }else if(auth.currentUser != null && product.state == 100){
+            sendRequestButton.setBackgroundResource(R.drawable.button_background_color_disabled)
+            sendRequestButton.text = "RECYCLED"
         }
     }
 

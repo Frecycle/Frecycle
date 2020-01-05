@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:id="@+id/messagesProductImage" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/messagesProfileImage"
+            android:layout_toEndOf="@id/messagesProductImage"
+            android:layout_alignBottom="@id/messagesProductImage"
+            app:civ_border="false"
+            android:layout_marginStart="-20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/product_name"
+            android:id="@+id/messagesProductName"
+            android:layout_toEndOf="@id/messagesProfileImage"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/messagesUserName"
+            android:text="@string/name"
+            android:layout_toEndOf="@id/messagesProfileImage"
+            android:layout_below="@id/messagesProductName"
+            android:layout_marginStart="10dp" />
+
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>

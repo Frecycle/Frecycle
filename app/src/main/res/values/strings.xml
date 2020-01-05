@@ -65,6 +65,9 @@
     <string name="owner_cannot_send_request">The owner of the product cannot send requests for the product!</string>
     <string name="sure_delete_product">Are you sure to delete this product?</string>
     <string name="product_not_reachable">The product is no longer accessible!</string>
+    <string name="notifications">Notifications</string>
+    <string name="waiting_response">You should wait the response of the owner!</string>
+    <string name="requests">Requests</string>
 
     <string-array name="city_array">
         <item>None</item>
