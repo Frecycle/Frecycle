@@ -134,7 +134,7 @@ class EditProfileFragment : Fragment() {
 
                      }else{
 
-                         if(imageUri != null || !Uri.EMPTY.equals(imageUri)){
+                         if(imageUri != null){
                              val filePath = storageReference.child("user_photos").child(auth.currentUser!!.uid + ".jpg")
 
                                  filePath.putFile(imageUri!!).continueWithTask { task ->
