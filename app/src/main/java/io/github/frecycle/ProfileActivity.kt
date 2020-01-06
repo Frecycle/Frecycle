@@ -73,14 +73,13 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.notifications_menu, menu)
+
         val view = menu!!.findItem(R.id.notification_menu_item).actionView
 
-        view.setOnClickListener(object: View.OnClickListener{
-            override fun onClick(v: View?) {
-                val intent = Intent(this@ProfileActivity, MessageActivity::class.java)
-                startActivity(intent)
-            }
-        })
+        view.setOnClickListener {
+            val intent = Intent(this@ProfileActivity, MessageListActivity::class.java)
+            startActivity(intent)
+        }
         badge = view.findViewById(R.id.notification_badge)
         updateCartCount()
         return super.onCreateOptionsMenu(menu)
@@ -154,8 +153,8 @@ class ProfileActivity : AppCompatActivity() {
                     }
                 }
 
-                onOfferFragment.initRecyclerView(onOfferFragment.view!!,productOnOfferImages)
-                recycledFragment.initRecyclerView(recycledFragment.view!!, productRecycledImages)
+                onOfferFragment.initRecyclerView(onOfferFragment.requireView(), productOnOfferImages)
+                recycledFragment.initRecyclerView(recycledFragment.requireView(), productRecycledImages)
 
             }
             override fun onCancelled(e: DatabaseError) {
@@ -223,7 +222,6 @@ class ProfileActivity : AppCompatActivity() {
 
         val progressBar : ProgressBar = findViewById(R.id.profileProgressBar)
         progressBar.visibility = View.GONE
-
     }
 
     override fun onResume() {

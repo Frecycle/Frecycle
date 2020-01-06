@@ -55,7 +55,7 @@ class ProductActivity : AppCompatActivity() {
         setContentView(R.layout.activity_product)
         initWidgets()
 
-        productId = intent.extras["productId"].toString()
+        productId = intent.getStringExtra("productId")
         setupFirebaseAuth()
         setupButtons()
 
@@ -175,16 +175,16 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun sendRequest(){
-        reference.addValueEventListener(object: ValueEventListener{
+        val query: Query = reference.child("products_requests").child(product.owner).child(productId).child(auth.currentUser!!.uid)
+        query.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for( ds: DataSnapshot in dataSnapshot.children) {
-                    if(ds.key.equals("products_requests")){
-                     val snapshot = ds.child(product.owner).child(productId).child(auth.currentUser!!.uid).ref
-                        snapshot.setValue(0)
-                        REQUEST_STATUS = 0
-                        // 0: PENDING, 100: YES, 200: NO
-                    }
-                }
+
+                val snapshot = dataSnapshot.ref
+                snapshot.setValue(0)
+                REQUEST_STATUS = 0
+                // 0: PENDING, 100: YES, 200: NO
+
+
             }
             override fun onCancelled(e: DatabaseError) {
                 Log.e("SendRequest:Product", e.message)
@@ -225,26 +225,26 @@ class ProductActivity : AppCompatActivity() {
         product = Product()
         for (ds : DataSnapshot in dataSnapshot.children) {
             if (ds.key.equals("products")){
-                    try{
-                        product.product_name = ds.child(productId).getValue(Product::class.java)!!.product_name
-                        product.description = ds.child(productId).getValue(Product::class.java)!!.description
-                        product.date = ds.child(productId).getValue(Product::class.java)!!.date
-                        product.time = ds.child(productId).getValue(Product::class.java)!!.time
-                        product.owner = ds.child(productId).getValue(Product::class.java)!!.owner
-                        product.state = ds.child(productId).getValue(Product::class.java)!!.state
+                try{
+                    product.product_name = ds.child(productId).getValue(Product::class.java)!!.product_name
+                    product.description = ds.child(productId).getValue(Product::class.java)!!.description
+                    product.date = ds.child(productId).getValue(Product::class.java)!!.date
+                    product.time = ds.child(productId).getValue(Product::class.java)!!.time
+                    product.owner = ds.child(productId).getValue(Product::class.java)!!.owner
+                    product.state = ds.child(productId).getValue(Product::class.java)!!.state
 
-                        productTitle.text = product.product_name
-                        productDescription.text = product.description
-                        productDateAndTime.text = product.date + " " + product.time
+                    productTitle.text = product.product_name
+                    productDescription.text = product.description
+                    productDateAndTime.text = product.date + " " + product.time
 
 
 
-                    }catch (e: Exception){
-                        Log.e("initProductData", e.message.toString())
-                        Toast.makeText(applicationContext, getString(R.string.product_not_reachable), Toast.LENGTH_LONG).show()
-                        this@ProductActivity.finish()
-                        return
-                    }
+                }catch (e: Exception){
+                    Log.e("initProductData", e.message.toString())
+                    Toast.makeText(applicationContext, getString(R.string.product_not_reachable), Toast.LENGTH_LONG).show()
+                    this@ProductActivity.finish()
+                    return
+                }
             }
         }
         for (ds : DataSnapshot in dataSnapshot.children){
@@ -283,20 +283,22 @@ class ProductActivity : AppCompatActivity() {
                 }
             }
         }
-        for(ds : DataSnapshot in dataSnapshot.children) {
-            if (ds.key.equals("products_requests")) {
-                ds.child(product.owner).child(productId).children.forEach { userNAnswers ->
-                    if(userNAnswers.key.equals(auth.currentUser!!.uid)){
-                        REQUEST_STATUS = userNAnswers.value.toString().toInt()
+        if(auth.currentUser != null){
+            for(ds : DataSnapshot in dataSnapshot.children) {
+                if (ds.key.equals("products_requests")) {
+                    ds.child(product.owner).child(productId).children.forEach { userNAnswers ->
+                        if(userNAnswers.key.equals(auth.currentUser!!.uid)){
+                            REQUEST_STATUS = userNAnswers.value.toString().toInt()
+                        }
                     }
                 }
             }
         }
-
         initAppearanceRequestButton()
     }
 
-    fun initAppearanceRequestButton(){
+    private fun initAppearanceRequestButton(){
+        Log.e("reqdeneme", REQUEST_STATUS.toString())
         if (auth.currentUser != null && auth.currentUser!!.uid == product.owner){
             sendRequestButton.setBackgroundResource(R.drawable.button_background_color_disabled)
             productDeleteButton.visibility = View.VISIBLE

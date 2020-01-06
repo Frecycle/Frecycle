@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MessageActivity">
+    tools:context=".MessageListActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/messagesToolbar"
+        android:id="@+id/messageListToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerViewMessages"
-        android:layout_below="@id/messagesToolbar">
+        android:layout_below="@id/messageListToolbar">
 
     </androidx.recyclerview.widget.RecyclerView>
 

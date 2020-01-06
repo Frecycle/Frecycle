@@ -68,6 +68,10 @@
     <string name="notifications">Notifications</string>
     <string name="waiting_response">You should wait the response of the owner!</string>
     <string name="requests">Requests</string>
+    <string name="type_message">Type a message...</string>
+    <string name="emtpy_message">You can\'t send empty message!</string>
+    <string name="received">RECEIVED</string>
+    <string name="sent">SENT</string>
 
     <string-array name="city_array">
         <item>None</item>

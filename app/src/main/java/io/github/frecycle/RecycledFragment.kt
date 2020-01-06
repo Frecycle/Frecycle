@@ -28,12 +28,10 @@ class RecycledFragment : Fragment() {
 
         recyclerViewImagesAdapter.setOnItemClickListener(object: OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val intent = Intent(view.context.applicationContext, ProductActivity::class.java)
+                val intent = Intent(view.context, ProductActivity::class.java)
                 intent.putExtra("productId", productMap.keys.toTypedArray()[position])
                 startActivity(intent)
             }
         })
     }
-
-
 }

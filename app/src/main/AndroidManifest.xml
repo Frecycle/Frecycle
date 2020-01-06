@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MessageActivity"></activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".MessageListActivity" />
         <activity android:name=".AddProductActivity" />
         <activity android:name=".ProductActivity" />
         <activity android:name=".SettingsActivity" />
