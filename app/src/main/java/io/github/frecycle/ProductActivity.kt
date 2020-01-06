@@ -25,7 +25,6 @@ import io.github.frecycle.util.FirebaseMethods
 import io.github.frecycle.util.SliderAdapter
 import io.github.frecycle.util.UniversalImageLoader
 import java.lang.Exception
-import java.lang.NullPointerException
 import kotlin.collections.ArrayList
 
 
@@ -193,7 +192,7 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun initWidgets() {
-        profilePhoto = findViewById(R.id.profilePhoto)
+        profilePhoto = findViewById(R.id.profilePhotoEdit)
         profileName = findViewById(R.id.profileNameText)
         ratingBar = findViewById(R.id.ratingBar)
         productTitle = findViewById(R.id.productName)

@@ -72,6 +72,8 @@
     <string name="emtpy_message">You can\'t send empty message!</string>
     <string name="received">RECEIVED</string>
     <string name="sent">SENT</string>
+    <string name="nothing_changed">Nothing has changed!</string>
+    <string name="data_changed">Your personal data has changed successfully!</string>
 
     <string-array name="city_array">
         <item>None</item>

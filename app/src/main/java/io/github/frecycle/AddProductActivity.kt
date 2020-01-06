@@ -60,28 +60,19 @@ class AddProductActivity : AppCompatActivity() {
     }
 
     private fun initializeListeners() {
-        val uploadButton : Button = findViewById(R.id.uploadProductButton)
+
         uploadPhoto = findViewById(R.id.ivAddPhotos)
+        uploadPhoto.setOnClickListener { openGallery() }
 
-        uploadPhoto.setOnClickListener ( object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                openGallery()
-            }
-        } )
-
-        uploadButton.setOnClickListener ( object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                validateProductData()
-            }
-        } )
-
+        val uploadButton : Button = findViewById(R.id.uploadProductButton)
+        uploadButton.setOnClickListener { validateProductData() }
     }
 
     private fun openGallery(){
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
-        startActivityForResult(intent,GALLERY_PICK)
+        startActivityForResult(intent, GALLERY_PICK)
     }
 
     private fun validateProductData(){
@@ -139,7 +130,7 @@ class AddProductActivity : AppCompatActivity() {
 
                             downloadPhotoURL = task.result.toString()
 
-                            Toast.makeText(this@AddProductActivity, "Photo url saved successfully!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@AddProductActivity, "Photo saved successfully!", Toast.LENGTH_LONG).show()
                             saveProductInfoToDatabase()
                         }
                     }

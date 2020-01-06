@@ -208,7 +208,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun initializeUserProfile(user : User){
-        val photoView : CircularImageView = findViewById(R.id.profilePhoto)
+        val photoView : CircularImageView = findViewById(R.id.profilePhotoEdit)
         UniversalImageLoader.setImage(user.profile_photo,photoView,null,"")
 
         val username : TextView = findViewById(R.id.profileNameText)
